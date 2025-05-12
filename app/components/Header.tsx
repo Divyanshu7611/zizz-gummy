@@ -7,6 +7,8 @@ import {
 } from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
+import HeaderTop from './global/HeaderTop';
+
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -24,10 +26,16 @@ export function Header({
   publicStoreDomain,
 }: HeaderProps) {
   const {shop, menu} = header;
+  console.log('Console the menu data',menu)
   return (
-    <header className="header">
+    <div>
+      <HeaderTop/>
+
+    <header className='header'>
+      
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
+        {/* <strong>{shop.name}</strong> */}
+        <img src='/static/logo.png' alt='logo'/>
       </NavLink>
       <HeaderMenu
         menu={menu}
@@ -37,6 +45,7 @@ export function Header({
       />
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
+    </div>
   );
 }
 
@@ -55,7 +64,7 @@ export function HeaderMenu({
   const {close} = useAside();
 
   return (
-    <nav className={className} role="navigation">
+    <nav className={`flex justify-center items-center gap-5 mx-auto ${className}`} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end
@@ -64,7 +73,7 @@ export function HeaderMenu({
           style={activeLinkStyle}
           to="/"
         >
-          Home
+          MyHome
         </NavLink>
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
@@ -79,14 +88,13 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className="header-menu-item"
             end
             key={item.id}
             onClick={close}
             prefetch="intent"
             style={activeLinkStyle}
             to={url}
-          >
+          > 
             {item.title}
           </NavLink>
         );
@@ -229,3 +237,6 @@ function activeLinkStyle({
     color: isPending ? 'grey' : 'black',
   };
 }
+
+
+
