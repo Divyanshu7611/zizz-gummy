@@ -4,6 +4,7 @@ import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import Hero from '~/components/Hero/Hero';
 import BriefCards from '~/components/Hero/BriefCards';
+import GummyDesc from '~/components/Hero/GummyDesc';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -66,6 +67,11 @@ export default function Homepage() {
       <BriefCards/>
       <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} /> 
+      <GummyDesc/>
+      <div className='w-full'>
+        <Image src='/static/coolway.png' alt='Cool Way Image'/>
+
+      </div>
     </div>
   );
 }
