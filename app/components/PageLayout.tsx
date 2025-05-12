@@ -32,6 +32,7 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) {
+  console.log('Children Get: ',children)
   return (
     <Aside.Provider>
       <CartAside cart={cart} />

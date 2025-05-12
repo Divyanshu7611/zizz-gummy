@@ -2,6 +2,7 @@ import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
+import Hero from '~/components/Hero/Hero';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -59,9 +60,10 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+    <div>
+      <Hero/>
+      {/* <FeaturedCollection collection={data.featuredCollection} />
+      <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
   );
 }
