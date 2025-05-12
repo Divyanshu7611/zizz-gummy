@@ -3,6 +3,7 @@ import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import Hero from '~/components/Hero/Hero';
+import BriefCards from '~/components/Hero/BriefCards';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -62,6 +63,7 @@ export default function Homepage() {
   return (
     <div>
       <Hero/>
+      <BriefCards/>
       {/* <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
