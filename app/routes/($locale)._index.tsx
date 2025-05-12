@@ -61,11 +61,11 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div>
+    <div className='min-h-screen'>
       <Hero/>
       <BriefCards/>
-      {/* <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} /> */}
+      <FeaturedCollection collection={data.featuredCollection} />
+      <RecommendedProducts products={data.recommendedProducts} /> 
     </div>
   );
 }
