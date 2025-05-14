@@ -5,6 +5,8 @@ import {Image, Money} from '@shopify/hydrogen';
 import Hero from '~/components/Hero/Hero';
 import BriefCards from '~/components/Hero/BriefCards';
 import GummyDesc from '~/components/Hero/GummyDesc';
+import GummyProductSection from '~/components/Hero/ProductSection';
+import TestimonialSlider from '~/components/Hero/TestimonialSlider';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -68,10 +70,13 @@ export default function Homepage() {
       <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} /> 
       <GummyDesc/>
+      <GummyProductSection/>
+      
       <div className='w-full'>
         <Image src='/static/coolway.png' alt='Cool Way Image'/>
 
       </div>
+      <TestimonialSlider/>
     </div>
   );
 }
