@@ -10,16 +10,16 @@ function GummyDesc() {
           Your Daily Dose of Health – Now in a Gummy!
         </h3>
 
-        <p className="text-[#2D2D2D] text-lg md:text-2xl">
+        <h4 className="text-[#2D2D2D] font-normal text-lg md:text-2xl">
           Let’s face it — pills are boring. Syrups are messy. Powders are a hassle. That’s why we created ZIZZ — a delicious gummy that takes care of your health without disrupting your routine. Pop a gummy, live your life.
-        </p>
+        </h4>
 
-        <ul className="text-[#2D2D2D] text-lg md:text-2xl list-disc list-outside pl-6 space-y-2">
+        <ol className="text-[#2D2D2D] text-lg md:text-2xl list-disc list-outside pl-6 space-y-2">
           <li>Tastes amazing</li>
           <li>Easy to carry, easy to consume</li>
           <li>Scientifically formulated</li>
           <li>No added sugar, no fuss</li>
-        </ul>
+        </ol>
       </div>
 
       {/* Image Section */}

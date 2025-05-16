@@ -21,7 +21,7 @@ export function ProductItem({
   const image = product.featuredImage;
 
   return (
-    <div className="product-item rounded shadow-sm space-y-2">
+    <div className="product-item rounded shadow-sm space-y-2 bg-[#FAFAFA]">
       <Link
         key={product.id}
         prefetch="intent"
@@ -33,7 +33,7 @@ export function ProductItem({
             alt={image.altText || product.title}
             aspectRatio="1/1"
             data={image}
-            loading={loading}
+            loading={loading} 
             sizes="(min-width: 45em) 400px, 100vw"
           />
         )}
