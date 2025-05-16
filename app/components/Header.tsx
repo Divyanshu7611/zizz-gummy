@@ -28,7 +28,6 @@ export function Header({
   publicStoreDomain,
 }: HeaderProps) {
   const {shop, menu} = header;
-  console.log('Console the menu data',menu)
   return (
     <div>
       <HeaderTop/>
@@ -37,7 +36,7 @@ export function Header({
       
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
         {/* <strong>{shop.name}</strong> */}
-        <img src='/static/logo.png' alt='logo'/>
+        <img src='/static/logo.png' alt='logo' className='w-20 h-10'/>
       </NavLink>
       <HeaderMenu
         menu={menu}

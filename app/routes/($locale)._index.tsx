@@ -1,8 +1,10 @@
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
+import { BsArrowUpRightCircle } from "react-icons/bs";
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import Hero from '~/components/Hero/Hero';
+import Button from '~/components/mini/Button';
 import BriefCards from '~/components/Hero/BriefCards';
 import GummyDesc from '~/components/Hero/GummyDesc';
 import GummyProductSection from '~/components/Hero/ProductSection';
@@ -64,20 +66,21 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div className='min-h-screen'>
+    <>
+    <div className='min-h-screen max-w-[1440px] mx-auto'>
       <Hero/>
       <BriefCards/>
-      <FeaturedCollection collection={data.featuredCollection} />
+      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <RecommendedProducts products={data.recommendedProducts} /> 
       <GummyDesc/>
       <GummyProductSection/>
       
       <div className='w-full'>
         <Image src='/static/coolway.png' alt='Cool Way Image'/>
-
       </div>
       <TestimonialSlider/>
     </div>
+    </>
   );
 }
 
@@ -110,7 +113,11 @@ function RecommendedProducts({
 }) {
   return (
     <div className="recommended-products">
-      <h2>Recommended Products</h2>
+      <div className='flex items-center justify-between w-full my-10'>
+      <h3 className='text-[#1F1F1F] text-4xl font-bold'>Explore Our Gummies</h3>
+      <Button text='Learn More' bgColor='bg-[#1E1E1E]' icon={<BsArrowUpRightCircle/>}/>
+
+      </div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
@@ -118,7 +125,7 @@ function RecommendedProducts({
               {response
                 ? response.products.nodes.map((product) => (
                     <ProductItem key={product.id} product={product} />
-                  ))
+                  ))  
                 : null}
             </div>
           )}

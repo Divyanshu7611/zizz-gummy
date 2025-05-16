@@ -168,7 +168,7 @@ button.reset:hover:not(:has(> *)) {
   display: flex;
   height: var(--header-height);
   padding: 0 1.5rem;
-  position: sticky;
+  position: static;
   top: 0;
   z-index: 1;
   /* border: 2px solid black; */
@@ -378,12 +378,13 @@ button.reset:hover:not(:has(> *)) {
   grid-gap: 1.5rem;
   grid-template-columns: repeat(2, 1fr);
   @media (min-width: 45em) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .recommended-product img {
   height: auto;
+  width: 100vw;
 }
 
 /*
@@ -423,6 +424,7 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .product-item img {
+
   height: auto;
   width: 100%;
 }

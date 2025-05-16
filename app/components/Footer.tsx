@@ -190,7 +190,7 @@ export function Footer({
                 <h3 className="font-semibold mb-2">Support</h3>
                 <nav className="space-y-2 text-sm text-gray-300">
                   {FALLBACK_FOOTER_MENU.items.map((item) => (
-                    <NavLink key={item.id} to={item.url} prefetch="intent">
+                    <NavLink key={item.id} to={item.url} prefetch="intent" className='flex text-white flex-col'>
                       {item.title}
                     </NavLink>
                   ))}
@@ -236,7 +236,7 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="space-y-2 text-sm text-gray-300" role="navigation">
+    <nav className="space-y-2 text-sm text-gray-300 flex flex-col" role="navigation">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         const url =
