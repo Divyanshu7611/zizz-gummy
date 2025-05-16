@@ -1,5 +1,7 @@
 import {Suspense} from 'react';
 import {Await, NavLink, useAsyncValue} from '@remix-run/react';
+import { FaSearch, FaShoppingCart, FaUser } from 'react-icons/fa';
+
 import {
   type CartViewPayload,
   useAnalytics,
@@ -113,7 +115,7 @@ function HeaderCtas({
       <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
+            {(isLoggedIn) => <FaUser/>}
           </Await>
         </Suspense>
       </NavLink>
@@ -139,7 +141,7 @@ function SearchToggle() {
   const {open} = useAside();
   return (
     <button className="reset" onClick={() => open('search')}>
-      Search
+      <FaSearch/>
     </button>
   );
 }
@@ -151,6 +153,7 @@ function CartBadge({count}: {count: number | null}) {
   return (
     <a
       href="/cart"
+      className='flex items-center'
       onClick={(e) => {
         e.preventDefault();
         open('cart');
@@ -162,7 +165,7 @@ function CartBadge({count}: {count: number | null}) {
         } as CartViewPayload);
       }}
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
+      <FaShoppingCart/> {count === null ? <span>&nbsp;</span> : count}
     </a>
   );
 }
