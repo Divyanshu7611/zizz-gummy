@@ -75,7 +75,7 @@ export default function Homepage() {
       <GummyDesc/>
       <GummyProductSection/>
       
-      <div className='w-full'>
+      <div className='w-full my-10'>
         <Image src='/static/coolway.png' alt='Cool Way Image'/>
       </div>
       <TestimonialSlider/>

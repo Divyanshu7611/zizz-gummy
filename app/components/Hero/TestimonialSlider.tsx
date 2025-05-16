@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import Button from "../mini/Button";
 
 const testimonials = [
   {
@@ -30,7 +31,7 @@ const testimonials = [
 
 const TestimonialSlider: React.FC = () => {
   return (
-    <section className="py-12 px-4 bg-[#f9f9f9] text-center">
+    <section className="py-12 px-4 bg-[#FAFAFA] text-center">
       <h3 className="text-2xl md:text-4xl font-bold mb-10 text-[#1F1F1F]">What Experts are Saying</h3>
 
       <Swiper
@@ -45,7 +46,7 @@ const TestimonialSlider: React.FC = () => {
       >
         {testimonials.map((t, index) => (
           <SwiperSlide key={index}>
-            <div className="bg-white rounded-xl p-6 shadow-md max-w-sm mx-auto text-left h-full flex flex-col justify-between">
+            <div className="bg-white my-5 rounded-xl p-6 shadow-md max-w-sm mx-auto text-left h-full flex flex-col justify-between inter">
               <div className="flex flex-col items-center mb-4">
                 <div className="relative">
                   <img
@@ -66,10 +67,9 @@ const TestimonialSlider: React.FC = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-
-      <button className="mt-10 bg-black text-white px-6 py-3 rounded-lg text-sm hover:bg-gray-800 transition">
-        Read More Glow Stories
-      </button>
+      <div className="w-full flex justify-center mt-10 mb-16">
+      <Button text="Read More Glow Stories" bgColor="bg-[#1F1F1F]" textColor="text-[#FAFAFA]"/>
+      </div>
     </section>
   );
 };

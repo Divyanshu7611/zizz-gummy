@@ -159,7 +159,7 @@ export function Footer({
               {/* Branding */}
               <div>
                 <div className="text-3xl font-bold mb-2">zizz</div>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-[#FAFAFA]">
                   Delicious and nutritious vitamin gummies for your daily wellness routine.
                 </p>
                 <div className="mt-4">
@@ -175,7 +175,7 @@ export function Footer({
 
               {/* About Us - Shopify Menu */}
               <div>
-                <h3 className="font-semibold mb-2">About Us</h3>
+                <h3 className="font-semibold mb-2 text-2xl">About Us</h3>
                 {footer?.menu && header.shop.primaryDomain?.url && (
                   <FooterMenu
                     menu={footer.menu}
@@ -187,10 +187,10 @@ export function Footer({
 
               {/* Support - fallback static links */}
               <div>
-                <h3 className="font-semibold mb-2">Support</h3>
-                <nav className="space-y-2 text-sm text-gray-300">
+                <h3 className="font-semibold mb-2 text-2xl">Support</h3>
+                <nav className="space-y-2 text-sm text-[#FAFAFA]">
                   {FALLBACK_FOOTER_MENU.items.map((item) => (
-                    <NavLink key={item.id} to={item.url} prefetch="intent" className='flex text-white flex-col'>
+                    <NavLink key={item.id} to={item.url} prefetch="intent" className='flex text-[#FAFAFA] opacity-90 flex-col'>
                       {item.title}
                     </NavLink>
                   ))}
@@ -199,15 +199,15 @@ export function Footer({
 
               {/* Email subscription */}
               <div>
-                <h3 className="font-semibold mb-2">GET ON THE LIST</h3>
-                <p className="text-sm text-gray-300 mb-4">
+                <h3 className="mb-2 text-[28px] font-extrabold">GET ON THE LIST</h3>
+                <p className="text-sm text-[#FAFAFA] opacity-90 mb-4">
                   Join our community for wellness tips, exclusive offers & more.
                 </p>
                 <form className="flex rounded overflow-hidden">
                   <input
                     type="email"
                     placeholder="Enter your Email"
-                    className="w-full px-4 py-2 text-black border-white border-2"
+                    className="w-full px-4 py-2 text-white border-white border-2 focus:outline"
                   />
                   <button type="submit" className="bg-[#b9f4d2] px-4 py-2 font-semibold text-black">
                     Subscribe
