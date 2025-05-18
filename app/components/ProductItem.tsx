@@ -39,8 +39,8 @@ export function ProductItem({
         )}
         <div className='p-2'>
 
-        <h4 className="mt-2 text-[#1F1F1F] font-bold text-3xl">{product.title}</h4>
-        <small className="text-[#1E1E1E] text-4xl font-semibold">
+        <h4 className="mt-2 text-[#1F1F1F] font-bold text-xl md:text-3xl">{product.title}</h4>
+        <small className="text-[#1E1E1E] text-2xl md:text-4xl font-semibold">
           <Money data={product.priceRange.minVariantPrice} />
         </small>
         </div>

@@ -21,7 +21,7 @@ export function Footer({
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="bg-[#181818] text-white px-8 py-12">
+          <footer className="bg-[#181818] text-white px-8 pt-12 pb-5">
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {/* Branding */}
               <div>
@@ -42,7 +42,7 @@ export function Footer({
 
               {/* About Us - Shopify Menu */}
               <div>
-                <h3 className="font-semibold mb-2 text-2xl">About Us</h3>
+                <h3 className="font-semibold mb-2 text-lg md:text-2xl">About Us</h3>
                 {footer?.menu && header.shop.primaryDomain?.url && (
                   <FooterMenu
                     menu={footer.menu}
@@ -54,7 +54,7 @@ export function Footer({
 
               {/* Support - fallback static links */}
               <div>
-                <h3 className="font-semibold mb-2 text-2xl">Support</h3>
+                <h3 className="font-semibold mb-2 text-lg md:text-2xl">Support</h3>
                 <nav className="space-y-2 text-sm text-[#FAFAFA]">
                   {FALLBACK_FOOTER_MENU.items.map((item) => (
                     <NavLink key={item.id} to={item.url} prefetch="intent" className='flex text-[#FAFAFA] opacity-90 flex-col'>
@@ -66,7 +66,7 @@ export function Footer({
 
               {/* Email subscription */}
               <div>
-                <h3 className="mb-2 text-[28px] font-extrabold">GET ON THE LIST</h3>
+                <h3 className="mb-2 text-xl md:text-[28px] font-extrabold">GET ON THE LIST</h3>
                 <p className="text-sm text-[#FAFAFA] opacity-90 mb-4">
                   Join our community for wellness tips, exclusive offers & more.
                 </p>
@@ -74,9 +74,9 @@ export function Footer({
                   <input
                     type="email"
                     placeholder="Enter your Email"
-                    className="w-full px-4 py-2 text-white border-white border-2 focus:outline"
+                    className="w-full px-4 py-2 text-white md:text-xl text-sm border-white border-2 focus:outline"
                   />
-                  <button type="submit" className="bg-[#b9f4d2] px-4 py-2 font-semibold text-black">
+                  <button type="submit" className="bg-[#b9f4d2] px-4 py-2 md:text-xl text-sm font-semibold text-black">
                     Subscribe
                   </button>
                 </form>

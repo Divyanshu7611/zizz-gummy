@@ -7,32 +7,32 @@ function BriefCards() {
       <FunctionalityCard
         imageSrc="/asset/HealthSupplement.png"
         imageAlt="Health supplements"
-        imageSize="w-14 h-14"
-        text="Health supplements"
+        imageSize="w-12 h-12"
+        text="HEALTH SUPPLEMENTS"
         textColor="text-[#2D2D2D]"
         bgColor="bg-[#FFFFFF]"
       />
       <FunctionalityCard
         imageSrc="/asset/SexWellness.png"
-        imageAlt="Sexual wellness"
-        imageSize="w-14 h-14"
-        text="Sexual wellness"
+        imageAlt="SEXUAL WELLNESS"
+        imageSize="w-12 h-12"
+        text="SEXUAL WELLNESS"
         textColor="text-[#2D2D2D]"
         bgColor="bg-[#FFFFFF]"
       />
       <FunctionalityCard
         imageSrc="/asset/Sports.png"
-        imageAlt="Sports nutrition's"
-        imageSize="w-14 h-14"
-        text="Sports nutrition's"
+        imageAlt="SPORTS NUTRITION'S"
+        imageSize="w-12 h-12"
+        text="SPORTS NUTRITION'S"
         textColor="text-[#2D2D2D]"
         bgColor="bg-[#FFFFFF]"
       />
       <FunctionalityCard
         imageSrc="/asset/Weight.png"
         imageAlt="Weight management "
-        imageSize="w-14 h-14"
-        text="Weight management"
+        imageSize="w-12 h-12"
+        text="WEIGHT MANAGEMENT"
         textColor="text-[#2D2D2D]"
         bgColor="bg-[#FFFFFF]"
       />
