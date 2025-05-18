@@ -161,10 +161,12 @@ console.log('Media Images',medias)
     //     }}
     //   />
     // </div>
-    <div className='mx-auto max-w-[1440px]'>
+    <div>
         {/* product Desc section */}
-         <div className='flex flex-col md:flex-row gap-16 justify-between'>
-         <ProductCarousel images={medias}/>
+         <div className='flex flex-col md:flex-row gap-10 justify-between max-w-screen-xl mx-auto py-5'>
+          <div className="w-full md:w-1/2">
+    <ProductCarousel images={medias} />
+  </div>
                {/* <div className="product-main">
         <h1>{title}</h1>
         <ProductPrice
@@ -185,59 +187,62 @@ console.log('Media Images',medias)
         <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
         <br />
       </div> */}
-      <div className='h-full flex-col justify-between max-w-2xl w-full'>
-        <h1 className='inter font-bold text-4xl text-black'>{title}</h1>
-        <div className='inter font-normal text-2xl mt-4' dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <h1 className='font-bold text-[20px] mt-7'>For Both Men and Women</h1>
+     <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0">
+  {/* Title */}
+  <h1 className="inter font-bold text-3xl md:text-4xl text-black">{title}</h1>
 
-        <div className='flex'>
-          <div className='mt-7 flex w-full justify-between'>
-          <ProductPrice
-           price={selectedVariant?.price}
-           compareAtPrice={selectedVariant?.compareAtPrice}
-         />
-          {/* Rating Section Static , Pending!!!!!!!!!!!!!!!! */}
-         <div className='flex items-center inter'>
-          <FaStar className='text-[#FFCC00] text-xl'/>
-          <h2 className='font-semibold text-base'>4.5/5(50+ Reviews)</h2>
-         </div>
+  {/* Description */}
+  <div
+    className="inter font-normal text-lg md:text-2xl mt-2"
+    dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+  />
 
-          </div>
-        </div>
-          
+  {/* Tagline */}
+  <h2 className="font-bold text-lg md:text-xl mt-5">For Both Men and Women</h2>
 
-          {/* Color Pack Section Still Static!!!!!!! */}
+  {/* Price & Ratings */}
+  <div className="mt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+    <ProductPrice
+      price={selectedVariant?.price}
+      compareAtPrice={selectedVariant?.compareAtPrice}
+    />
+    <div className="flex items-center gap-1 inter text-sm md:text-base">
+      <FaStar className="text-[#FFCC00] text-lg" />
+      <span className="font-semibold">4.5/5 (50+ Reviews)</span>
+    </div>
+  </div>
 
-          <div className='flec flex-col mt-7'>
-            <h1 className='text-[20px] font-bold inter'>Pick your pack:</h1>
-            <div className='w-full flex justify-between items-center mt-3'>
-              <div className='bg-[#F8F4EC] rounded-lg w-24 h-24'></div>
-              <div className='bg-[#F8F4EC] rounded-lg w-24 h-24'></div>
-              <div className='bg-[#F8F4EC] rounded-lg w-24 h-24'></div>
-              <div className='bg-[#F8F4EC] rounded-lg w-24 h-24'></div>
-            </div>
+  {/* Color Pack Section */}
+  <div className="flex flex-col mt-6">
+    <h3 className="text-lg md:text-xl font-bold inter">Pick your pack:</h3>
+    <div className="flex flex-wrap justify-start gap-4 mt-3">
+      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+    </div>
+  </div>
 
-          </div>
+  {/* Quantity & Add to Cart */}
+  <div className="flex flex-col sm:flex-row mt-6 gap-3">
+    <div className="flex items-center justify-between bg-[#1F1F1F] text-white px-4 py-2 text-lg rounded-sm w-full sm:w-1/3">
+      <button><IoIosArrowBack /></button>
+      <span>{counter}</span>
+      <button><IoIosArrowForward /></button>
+    </div>
+    <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full sm:w-2/3 font-bold inter">
+      ADD TO CART
+    </button>
+  </div>
 
+  {/* Buy Now */}
+  <div className="w-full mt-3">
+    <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter">
+      BUY NOW
+    </button>
+  </div>
+</div>
 
-          {/* quantiti and checkout section */}
-          <div className='flex mt-7 gap-2'>
-            <div className='w-1/3 flex items-center justify-between bg-[#1F1F1F] text-white px-2 text-lg rounded-sm'>
-            <button><IoIosArrowBack/></button>
-            {counter}
-            <button><IoIosArrowForward/></button>
-                   
-            </div>
-            <div className='w-2/3'>
-            <button className = 'bg-[#6D9773] text-white px-2 py-2 rounded-sm w-full font-bold inter'>ADD TO CART</button>
-            </div>
-            
-
-          </div>
-            <div className='w-full mt-3'>
-            <button className = 'bg-[#6D9773] text-white px-2 py-2 rounded-sm w-full font-bold inter'>BUY NOW</button>
-            </div>
-      </div>
          </div>
     </div>
   );
