@@ -11,7 +11,7 @@ function HeaderTop() {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-3 lg:space-y-0">
         
         {/* Left Section - Contact */}
-        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full lg:w-1/3 justify-center lg:justify-start">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full lg:w-1/3 justify-center lg:justify-start inter">
           <div className="flex items-center gap-2">
             <FiPhone className="text-lg" />
             <span>+91 1234567890</span>
@@ -23,12 +23,12 @@ function HeaderTop() {
         </div>
 
         {/* Middle Section - Message */}
-        <div className="text-center font-semibold w-full lg:w-1/3">
+        <div className="text-center font-semibold w-full lg:w-1/3 poppins">
           Free shipping on all orders above ₹499
         </div>
 
         {/* Right Section - Socials */}
-        <div className="flex items-center gap-4 text-lg w-full lg:w-1/3 justify-center lg:justify-end">
+        <div className="flex items-center gap-4 text-lg w-full lg:w-1/3 justify-center lg:justify-end inter">
           <a href="#" aria-label="Facebook">
             <SlSocialFacebook />
           </a>
