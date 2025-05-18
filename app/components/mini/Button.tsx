@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-6 py-2 rounded border-2 font-medium poppins w-full justify-center
+      className={`flex items-center gap-2 px-6 py-2 rounded border-2 font-medium poppins justify-center
         transition-all duration-300 ease-in-out transform
         ${bgColor} ${textColor} ${hoverBgColor} ${hoverTextColor} ${borderColor}
         hover:-translate-y-1 hover:shadow-lg`}
