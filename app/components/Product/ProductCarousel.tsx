@@ -213,7 +213,7 @@ export default function ProductCarousel({ images }: { images: ImageNode[] }) {
       {totalSlides > 1 && (
         <div
           ref={thumbRef}
-          className="flex overflow-x-auto gap-2 px-4 py-2 scroll-smooth"
+          className="flex overflow-x-auto gap-2 px-4 scroll-smooth"
           style={{ scrollSnapType: "x mandatory" }}
         >
           {images.map((image, index) => (

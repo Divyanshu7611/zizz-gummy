@@ -167,38 +167,19 @@ console.log('Media Images',medias)
           <div className="w-full md:w-1/2">
     <ProductCarousel images={medias} />
   </div>
-               {/* <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
-      </div> */}
-     <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0">
+
+     <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0 py-2">
   {/* Title */}
   <h1 className="inter font-bold text-3xl md:text-4xl text-black">{title}</h1>
 
   {/* Description */}
   <div
-    className="inter font-normal text-lg md:text-2xl mt-2"
+    className="inter font-normal text-lg md:text-2xl"
     dangerouslySetInnerHTML={{ __html: descriptionHtml }}
   />
 
   {/* Tagline */}
-  <h2 className="font-bold text-lg md:text-xl mt-5">For Both Men and Women</h2>
+  <h2 className="font-bold text-lg md:text-xl">For Both Men and Women</h2>
 
   {/* Price & Ratings */}
   <div className="mt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -236,7 +217,7 @@ console.log('Media Images',medias)
   </div>
 
   {/* Buy Now */}
-  <div className="w-full mt-3">
+  <div className="w-full">
     <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter">
       BUY NOW
     </button>
