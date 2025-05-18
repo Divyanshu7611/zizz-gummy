@@ -19,10 +19,10 @@ const FunctionalityCard: React.FC<FunctionalityCardProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center p-6 rounded-lg shadow-md transition-transform duration-300 hover:scale-105 ${bgColor}`}
+      className={`flex flex-col items-center justify-center drop-shadow-lg poppins p-6 rounded-lg shadow-md transition-transform duration-300 hover:scale-105 ${bgColor}`}
     >
       <img src={imageSrc} alt={imageAlt} className={`${imageSize} object-contain`} />
-      <p className={`mt-4 text-center ${textColor} font-medium`}>{text}</p>
+      <p className={`mt-4 text-center text-md md:text-[20px] ${textColor} font-bold`}>{text}</p>
     </div>
   );
 };

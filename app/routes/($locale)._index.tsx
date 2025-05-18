@@ -67,7 +67,6 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
-  console.log('The COnsole Recommended Product', RecommendedProducts)
   return (
     <>
     <div className='min-h-screen max-w-[1440px] mx-auto'>
@@ -77,7 +76,7 @@ export default function Homepage() {
       <RecommendedProducts products={data.recommendedProducts} /> 
       <GummyDesc/>
       <GummyProductSection/>
-      <div className='w-full my-10'>
+      <div className='w-full mt-10'>
         <Image src='/static/coolway.png' alt='Cool Way Image'/>
       </div>
       <TestimonialSlider/>
