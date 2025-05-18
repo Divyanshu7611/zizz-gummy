@@ -14,6 +14,8 @@ import type {
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
 import {ProductItem} from '~/components/ProductItem';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Hydrogen | Home'}];
@@ -65,6 +67,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
+  console.log('The COnsole Recommended Product', RecommendedProducts)
   return (
     <>
     <div className='min-h-screen max-w-[1440px] mx-auto'>
@@ -74,7 +77,6 @@ export default function Homepage() {
       <RecommendedProducts products={data.recommendedProducts} /> 
       <GummyDesc/>
       <GummyProductSection/>
-      
       <div className='w-full my-10'>
         <Image src='/static/coolway.png' alt='Cool Way Image'/>
       </div>
@@ -102,6 +104,7 @@ function FeaturedCollection({
         </div>
       )}
       <h1>{collection.title}</h1>
+      {/* <p>{collection.}</p> */}
     </Link>
   );
 }
@@ -112,29 +115,79 @@ function RecommendedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <div className="recommended-products">
-      <div className='flex items-center justify-between w-full my-10'>
-      <h3 className='text-[#1F1F1F] text-4xl font-bold'>Explore Our Gummies</h3>
-      <Button text='Learn More' bgColor='bg-[#1E1E1E]' icon={<BsArrowUpRightCircle/>}/>
+    // <div className="recommended-products">
+    //   <div className='flex items-center justify-between w-full my-10'>
+    //   <h3 className='text-[#1F1F1F] text-4xl font-bold'>Explore Our Gummies</h3>
+    //   <Button text='Learn More' bgColor='bg-[#1E1E1E]' icon={<BsArrowUpRightCircle/>}/> 
+    //   </div>
+    //   <Suspense fallback={<div>Loading...</div>}>
+    //     <Await resolve={products}>
 
+    //       {(response) => (
+    //         <div className="recommended-products-grid">
+    //           {response
+    //             ? response.products.nodes.map((product) => (
+    //                 <ProductItem key={product.id} product={product} /> 
+    //               ))  
+    //             : null}
+    //         </div>
+    //       )}
+    //     </Await>
+    //   </Suspense>
+    //   <br />
+    // </div>
+      <div className="recommended-products px-2 py-8">
+      {/* Header section */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 my-6">
+        <h3 className="text-[#1F1F1F] text-2xl sm:text-3xl lg:text-4xl font-bold">
+          Explore Our Gummies
+        </h3>
+        <Button
+          text="Learn More"
+          bgColor="bg-[#1E1E1E]"
+          icon={<BsArrowUpRightCircle />}
+        />
       </div>
+
+      {/* Product Grid / Slider */}
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
-          {(response) => (
-            <div className="recommended-products-grid">
-              {response
-                ? response.products.nodes.map((product) => (
+          {(response) =>
+            response ? (
+              <div>
+                {/* Swiper slider for mobile */}
+                <div className="block md:hidden">
+                  <Swiper
+                    spaceBetween={16}
+                    slidesPerView={1}
+                    autoplay={{ delay: 2500, disableOnInteraction: false }}
+                    modules={[Autoplay]}
+                    grabCursor={true}
+                  >
+                    {response.products.nodes.map((product) => (
+                      <SwiperSlide key={product.id}>
+                        <ProductItem product={product} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+
+                {/* Grid for md+ */}
+                <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 justify-between xl:grid-cols-4 gap-6">
+                  {response.products.nodes.map((product) => (
                     <ProductItem key={product.id} product={product} />
-                  ))  
-                : null}
-            </div>
-          )}
+                  ))}
+                </div>
+              </div>
+            ) : null
+          }
         </Await>
       </Suspense>
-      <br />
     </div>
   );
 }
+
+
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
