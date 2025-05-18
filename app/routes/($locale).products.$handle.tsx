@@ -1,5 +1,8 @@
-import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, type MetaFunction} from '@remix-run/react';
+import { redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, type MetaFunction } from '@remix-run/react';
+import ProductBenefits from '~/components/Product/ProductBenefits';
+import ProductSection from '~/components/Hero/ProductSection';
+import { Image } from '@shopify/hydrogen';
 import { useState } from 'react';
 import {
   getSelectedProductOptions,
@@ -9,19 +12,20 @@ import {
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
-import {ProductForm} from '~/components/ProductForm';
-import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import { ProductPrice } from '~/components/ProductPrice';
+import { ProductImage } from '~/components/ProductImage';
+import { ProductForm } from '~/components/ProductForm';
+import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import ProductCarousel from '~/components/Product/ProductCarousel';
 import { FaStar } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 import Button from '~/components/mini/Button';
+import TestimonialSlider from '~/components/Product/ProductTestimonialSlider';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    { title: `Hydrogen | ${data?.product.title ?? ''}` },
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -36,7 +40,7 @@ export async function loader(args: LoaderFunctionArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  return { ...deferredData, ...criticalData };
 }
 
 /**
@@ -48,29 +52,29 @@ async function loadCriticalData({
   params,
   request,
 }: LoaderFunctionArgs) {
-  const {handle} = params;
-  const {storefront} = context;
+  const { handle } = params;
+  const { storefront } = context;
 
   if (!handle) {
     throw new Error('Expected product handle to be defined');
   }
 
-  const [{product}] = await Promise.all([
+  const [{ product }] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
-      variables: {handle, selectedOptions: getSelectedProductOptions(request)},
+      variables: { handle, selectedOptions: getSelectedProductOptions(request) },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
   if (!product?.id) {
-    throw new Response(null, {status: 404});
+    throw new Response(null, { status: 404 });
   }
-  
+
 
 
 
   // The API handle might be localized, so redirect to the localized handle
-  redirectIfHandleIsLocalized(request, {handle, data: product});
+  redirectIfHandleIsLocalized(request, { handle, data: product });
 
   return {
     product,
@@ -82,7 +86,7 @@ async function loadCriticalData({
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({context, params}: LoaderFunctionArgs) {
+function loadDeferredData({ context, params }: LoaderFunctionArgs) {
   // Put any API calls that is not critical to be available on first page render
   // For example: product reviews, product recommendations, social feeds.
 
@@ -90,8 +94,8 @@ function loadDeferredData({context, params}: LoaderFunctionArgs) {
 }
 
 export default function Product() {
-  const {product} = useLoaderData<typeof loader>();
-  const [counter,setCounter] = useState<number>(1)
+  const { product } = useLoaderData<typeof loader>();
+  const [counter, setCounter] = useState<number>(1)
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -111,120 +115,107 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
+  const { title, descriptionHtml } = product;
   console.log('This is Product Data', selectedVariant);
-     console.log('Product Media:', product.media);
+  console.log('Product Media:', product.media);
 
-  const medias = product.media.edges.map(({ node }:any) => ({
-  url: node.image?.url || node.previewImage?.url,
-  alt: node.alt || 'Product Image',
-}));
+  const medias = product.media.edges.map(({ node }: any) => ({
+    url: node.image?.url || node.previewImage?.url,
+    alt: node.alt || 'Product Image',
+  }));
 
-console.log('Media Images',medias)
+  console.log('Media Images', medias)
 
   return (
-    // <div className="product">
-    //   <ProductImage image={selectedVariant?.image} />
-      // <div className="product-main">
-      //   <h1>{title}</h1>
-      //   <ProductPrice
-      //     price={selectedVariant?.price}
-      //     compareAtPrice={selectedVariant?.compareAtPrice}
-      //   />
-      //   <br />
-      //   <ProductForm
-      //     productOptions={productOptions}
-      //     selectedVariant={selectedVariant}
-      //   />
-      //   <br />
-      //   <br />
-      //   <p>
-      //     <strong>Description</strong>
-      //   </p>
-      //   <br />
-      //   <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-      //   <br />
-      // </div>
-    //   <Analytics.ProductView
-    //     data={{
-    //       products: [
-    //         {
-    //           id: product.id,
-    //           title: product.title,
-    //           price: selectedVariant?.price.amount || '0',
-    //           vendor: product.vendor,
-    //           variantId: selectedVariant?.id || '',
-    //           variantTitle: selectedVariant?.title || '',
-    //           quantity: 1,
-    //         },
-    //       ],
-    //     }}
-    //   />
-    // </div>
     <div>
-        {/* product Desc section */}
-         <div className='flex flex-col md:flex-row gap-10 justify-between max-w-screen-xl mx-auto py-5'>
-          <div className="w-full md:w-1/2">
-    <ProductCarousel images={medias} />
-  </div>
+      {/* product Desc section */}
+      <div className='flex flex-col md:flex-row gap-10 justify-between max-w-screen-xl mx-auto py-5'>
+        <div className="w-full md:w-1/2">
+          <ProductCarousel images={medias} />
+        </div>
 
-     <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0 py-2">
-  {/* Title */}
-  <h1 className="inter font-bold text-3xl md:text-4xl text-black">{title}</h1>
+        <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0 py-2">
+          {/* Title */}
+          <h1 className="inter font-bold text-3xl md:text-4xl text-black">{title}</h1>
 
-  {/* Description */}
-  <div
-    className="inter font-normal text-lg md:text-2xl"
-    dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-  />
+          {/* Description */}
+          <div
+            className="inter font-normal text-lg md:text-2xl"
+            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+          />
 
-  {/* Tagline */}
-  <h2 className="font-bold text-lg md:text-xl">For Both Men and Women</h2>
+          {/* Tagline */}
+          <h2 className="font-bold text-lg md:text-xl">For Both Men and Women</h2>
 
-  {/* Price & Ratings */}
-  <div className="mt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-    <ProductPrice
-      price={selectedVariant?.price}
-      compareAtPrice={selectedVariant?.compareAtPrice}
-    />
-    <div className="flex items-center gap-1 inter text-sm md:text-base">
-      <FaStar className="text-[#FFCC00] text-lg" />
-      <span className="font-semibold">4.5/5 (50+ Reviews)</span>
-    </div>
-  </div>
+          {/* Price & Ratings */}
+          <div className="mt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <ProductPrice
+              price={selectedVariant?.price}
+              compareAtPrice={selectedVariant?.compareAtPrice}
+            />
+            <div className="flex items-center gap-1 inter text-sm md:text-base">
+              <FaStar className="text-[#FFCC00] text-lg" />
+              <span className="font-semibold">4.5/5 (50+ Reviews)</span>
+            </div>
+          </div>
 
-  {/* Color Pack Section */}
-  <div className="flex flex-col mt-6">
-    <h3 className="text-lg md:text-xl font-bold inter">Pick your pack:</h3>
-    <div className="flex flex-wrap justify-start gap-4 mt-3">
-      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
-      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
-      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
-      <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
-    </div>
-  </div>
+          {/* Color Pack Section */}
+          <div className="flex flex-col mt-6">
+            <h3 className="text-lg md:text-xl font-bold inter">Pick your pack:</h3>
+            <div className="flex flex-wrap justify-start gap-4 mt-3">
+              <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+              <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+              <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+              <div className="bg-[#F8F4EC] rounded-lg w-20 h-20 md:w-24 md:h-24"></div>
+            </div>
+          </div>
 
-  {/* Quantity & Add to Cart */}
-  <div className="flex flex-col sm:flex-row mt-6 gap-3">
-    <div className="flex items-center justify-between bg-[#1F1F1F] text-white px-4 py-2 text-lg rounded-sm w-full sm:w-1/3">
-      <button><IoIosArrowBack /></button>
-      <span>{counter}</span>
-      <button><IoIosArrowForward /></button>
-    </div>
-    <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full sm:w-2/3 font-bold inter">
-      ADD TO CART
-    </button>
-  </div>
+          {/* Quantity & Add to Cart */}
+          <div className="flex flex-col sm:flex-row mt-6 gap-3">
+            <div className="flex items-center justify-between bg-[#1F1F1F] text-white px-4 py-2 text-lg rounded-sm w-full sm:w-1/3">
+              <button><IoIosArrowBack /></button>
+              <span>{counter}</span>
+              <button><IoIosArrowForward /></button>
+            </div>
+            <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full sm:w-2/3 font-bold inter">
+              ADD TO CART
+            </button>
+          </div>
 
-  {/* Buy Now */}
-  <div className="w-full">
-    <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter">
-      BUY NOW
-    </button>
-  </div>
-</div>
+          {/* Buy Now */}
+          <div className="w-full">
+            <button className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter">
+              BUY NOW
+            </button>
+          </div>
+        </div>
 
-         </div>
+      </div>
+      <Analytics.ProductView
+        data={{
+          products: [
+            {
+              id: product.id,
+              title: product.title,
+              price: selectedVariant?.price.amount || '0',
+              vendor: product.vendor,
+              variantId: selectedVariant?.id || '',
+              variantTitle: selectedVariant?.title || '',
+              quantity: 1,
+            },
+          ],
+        }}
+      />
+
+
+      <div className='bg-[#FAFAFA]'>
+      {/* Product Benefits & Ingredients */}
+      <ProductBenefits/>
+      <Image src='/static/ProductPageDesc.png' alt='gummy showcase' className='h-[200px] md:h-[600px]'/>
+      <TestimonialSlider/>
+      </div> 
+      <ProductSection/>
+
     </div>
   );
 }
