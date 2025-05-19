@@ -13,7 +13,7 @@ declare module '@remix-run/server-runtime' {
 
 export default defineConfig({
   plugins: [
-    tailwindcss(),
+    tailwindcss(), 
     hydrogen(),
     oxygen(),
     remix({
