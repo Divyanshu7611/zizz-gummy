@@ -3,6 +3,8 @@ import {useLoaderData, type MetaFunction} from '@remix-run/react';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
+import ProductBenefits from '~/components/Product/ProductBenefits';
+import { Image } from '@shopify/hydrogen';
 
 export const meta: MetaFunction<typeof loader> = () => {
   return [{title: `Hydrogen | Products`}];
@@ -50,11 +52,16 @@ export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
+    <div className="inter">
+      <div className='bg-[#B0EACD] w-full py-32 flex justify-center items-center flex-col'>
+        <h1 className='text-[40px] font-bold text-center'>Your Daily Rituals, Reinvented</h1>
+        <p className='text-center text-xl max-w-xl'>Scientifically formulated gummies to support sleep, recovery, and radiance—naturally</p>
+      </div>
+
+      <h1 className='text-center text-4xl text-[#1F1F1F] font-bold py-10 inter'>Explore Our Gummies</h1>
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="products-grid"
+        resourcesClassName="products-grid max-w-screen-xl mx-auto"
       >
         {({node: product, index}) => (
           <ProductItem
@@ -64,6 +71,11 @@ export default function Collection() {
           />
         )}
       </PaginatedResourceSection>
+
+      <div className='bg-[#FAFAFA]'>
+        <ProductBenefits/>
+      </div>
+      <Image src='/static/ProductPageDesc.png' alt='Product Description' className='mb-10'/>
     </div>
   );
 }

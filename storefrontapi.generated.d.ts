@@ -720,6 +720,63 @@ export type PoliciesQuery = {
   };
 };
 
+type MediaFields_ExternalVideo_Fragment = Pick<
+  StorefrontAPI.ExternalVideo,
+  'embeddedUrl' | 'host' | 'mediaContentType' | 'alt'
+> & {
+  previewImage?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'url' | 'altText'>
+  >;
+};
+
+type MediaFields_MediaImage_Fragment = Pick<
+  StorefrontAPI.MediaImage,
+  'mediaContentType' | 'alt'
+> & {
+  image?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
+  >;
+  previewImage?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'url' | 'altText'>
+  >;
+};
+
+type MediaFields_Model3d_Fragment = Pick<
+  StorefrontAPI.Model3d,
+  'mediaContentType' | 'alt'
+> & {
+  sources: Array<
+    Pick<
+      StorefrontAPI.Model3dSource,
+      'url' | 'mimeType' | 'format' | 'filesize'
+    >
+  >;
+  previewImage?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'url' | 'altText'>
+  >;
+};
+
+type MediaFields_Video_Fragment = Pick<
+  StorefrontAPI.Video,
+  'mediaContentType' | 'alt'
+> & {
+  sources: Array<
+    Pick<
+      StorefrontAPI.VideoSource,
+      'url' | 'mimeType' | 'format' | 'height' | 'width'
+    >
+  >;
+  previewImage?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'url' | 'altText'>
+  >;
+};
+
+export type MediaFieldsFragment =
+  | MediaFields_ExternalVideo_Fragment
+  | MediaFields_MediaImage_Fragment
+  | MediaFields_Model3d_Fragment
+  | MediaFields_Video_Fragment;
+
 export type ProductVariantFragment = Pick<
   StorefrontAPI.ProductVariant,
   'availableForSale' | 'id' | 'sku' | 'title'
@@ -752,6 +809,49 @@ export type ProductFragment = Pick<
   | 'encodedVariantExistence'
   | 'encodedVariantAvailability'
 > & {
+  media: {
+    edges: Array<{
+      node:
+        | (Pick<
+            StorefrontAPI.ExternalVideo,
+            'embeddedUrl' | 'host' | 'mediaContentType' | 'alt'
+          > & {
+            previewImage?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText'>
+            >;
+          })
+        | (Pick<StorefrontAPI.MediaImage, 'mediaContentType' | 'alt'> & {
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
+            >;
+            previewImage?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText'>
+            >;
+          })
+        | (Pick<StorefrontAPI.Model3d, 'mediaContentType' | 'alt'> & {
+            sources: Array<
+              Pick<
+                StorefrontAPI.Model3dSource,
+                'url' | 'mimeType' | 'format' | 'filesize'
+              >
+            >;
+            previewImage?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText'>
+            >;
+          })
+        | (Pick<StorefrontAPI.Video, 'mediaContentType' | 'alt'> & {
+            sources: Array<
+              Pick<
+                StorefrontAPI.VideoSource,
+                'url' | 'mimeType' | 'format' | 'height' | 'width'
+              >
+            >;
+            previewImage?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText'>
+            >;
+          });
+    }>;
+  };
   options: Array<
     Pick<StorefrontAPI.ProductOption, 'name'> & {
       optionValues: Array<
@@ -866,6 +966,52 @@ export type ProductQuery = {
       | 'encodedVariantExistence'
       | 'encodedVariantAvailability'
     > & {
+      media: {
+        edges: Array<{
+          node:
+            | (Pick<
+                StorefrontAPI.ExternalVideo,
+                'embeddedUrl' | 'host' | 'mediaContentType' | 'alt'
+              > & {
+                previewImage?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                >;
+              })
+            | (Pick<StorefrontAPI.MediaImage, 'mediaContentType' | 'alt'> & {
+                image?: StorefrontAPI.Maybe<
+                  Pick<
+                    StorefrontAPI.Image,
+                    'url' | 'altText' | 'width' | 'height'
+                  >
+                >;
+                previewImage?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                >;
+              })
+            | (Pick<StorefrontAPI.Model3d, 'mediaContentType' | 'alt'> & {
+                sources: Array<
+                  Pick<
+                    StorefrontAPI.Model3dSource,
+                    'url' | 'mimeType' | 'format' | 'filesize'
+                  >
+                >;
+                previewImage?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                >;
+              })
+            | (Pick<StorefrontAPI.Video, 'mediaContentType' | 'alt'> & {
+                sources: Array<
+                  Pick<
+                    StorefrontAPI.VideoSource,
+                    'url' | 'mimeType' | 'format' | 'height' | 'width'
+                  >
+                >;
+                previewImage?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                >;
+              });
+        }>;
+      };
       options: Array<
         Pick<StorefrontAPI.ProductOption, 'name'> & {
           optionValues: Array<
@@ -1238,7 +1384,7 @@ interface GeneratedQueryTypes {
     return: PoliciesQuery;
     variables: PoliciesQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n     media(first: 10) {\n    edges {\n      node {\n        ...MediaFields\n      }\n    }\n  }\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n\n    \n      \n    selectedOptions {\n      name\n      value\n    }\n    sku\n\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n  #graphql\n  fragment MediaFields on Media {\n    mediaContentType\n    alt\n    previewImage {\n      url\n      altText\n    }\n    ... on MediaImage {\n      image {\n        url\n        altText\n        width\n        height\n      }\n    }\n    ... on Video {\n      sources {\n        url\n        mimeType\n        format\n        height\n        width\n      }\n    }\n    ... on Model3d {\n      sources {\n        url\n        mimeType\n        format\n        filesize\n      }\n    }\n    ... on ExternalVideo {\n      embeddedUrl\n      host\n    }\n  }\n \n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };

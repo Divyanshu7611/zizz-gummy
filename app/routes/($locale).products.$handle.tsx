@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData, type MetaFunction } from '@remix-run/react';
 import ProductBenefits from '~/components/Product/ProductBenefits';
 import ProductSection from '~/components/Hero/ProductSection';
 import { Image } from '@shopify/hydrogen';
-import { useState } from 'react';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -17,11 +17,12 @@ import { ProductImage } from '~/components/ProductImage';
 import { ProductForm } from '~/components/ProductForm';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import ProductCarousel from '~/components/Product/ProductCarousel';
-import { FaStar } from "react-icons/fa6";
+import { FaQ, FaStar } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 import Button from '~/components/mini/Button';
 import TestimonialSlider from '~/components/Product/ProductTestimonialSlider';
+import FAQ from '~/components/Product/Faqs';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -215,6 +216,7 @@ export default function Product() {
       <TestimonialSlider/>
       </div> 
       <ProductSection/>
+      <FAQ/>
 
     </div>
   );
