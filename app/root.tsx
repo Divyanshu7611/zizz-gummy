@@ -1,4 +1,6 @@
 import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
+import { FaExclamationTriangle } from "react-icons/fa";
+import Button from './components/mini/Button';
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {
   Outlet,
@@ -180,27 +182,76 @@ export default function App() {
   return <Outlet />;
 }
 
+// export function ErrorBoundary() {
+//   const error = useRouteError();
+//   let errorMessage = 'Unknown error';
+//   let errorStatus = 500;
+
+//   if (isRouteErrorResponse(error)) {
+//     errorMessage = error?.data?.message ?? error.data;
+//     errorStatus = error.status;
+//   } else if (error instanceof Error) {
+//     errorMessage = error.message;
+//   }
+
+//   return (
+//     <div className="route-error">
+//       <h1>Oops</h1>
+//       <h2>{errorStatus}</h2>
+//       {errorMessage && (
+//         <fieldset>
+//           <pre>{errorMessage}</pre>
+//         </fieldset>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
 export function ErrorBoundary() {
   const error = useRouteError();
-  let errorMessage = 'Unknown error';
+  let errorMessage = "Unknown error occurred.";
   let errorStatus = 500;
 
   if (isRouteErrorResponse(error)) {
-    errorMessage = error?.data?.message ?? error.data;
+    errorMessage = error?.data?.message ?? error.data ?? "Page not found.";
     errorStatus = error.status;
   } else if (error instanceof Error) {
     errorMessage = error.message;
   }
 
+  const is404 = errorStatus === 404;
+
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 text-gray-800 p-6 text-center">
+      <div className="">
+        <FaExclamationTriangle className="text-red-500 text-6xl mb-6 mx-auto" />
+
+        <h1 className="text-4xl font-bold mb-2">
+          {is404 ? "Page Not Found" : "Something Went Wrong"}
+        </h1>
+        <h2 className="text-xl text-gray-600 mb-4">
+          Error {errorStatus}
+        </h2>
+        
+        {/* <fieldset className="border border-gray-300 rounded-md p-4 bg-gray-50 text-sm overflow-auto">
+          <legend className="px-2 text-gray-500 text-sm">Details</legend>
+          <pre className="whitespace-pre-wrap break-words">{errorMessage}</pre>
+        </fieldset> */}
+
+        {/* <button
+          onClick={() => (window.location.href = "/")}
+          className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-full transition"
+        >
+          Go Back Home
+        </button> */}
+        <div className='mx-auto flex justify-center items-center'>
+
+        <Button text='Go Back Home' bgColor='bg-[#66BB6A]' textColor='text-white'/>
+        </div>
+      </div>
     </div>
   );
 }
