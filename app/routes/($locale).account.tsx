@@ -110,6 +110,7 @@ import {
 import {Form, NavLink, Outlet, useLoaderData} from '@remix-run/react';
 import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
 import {useState} from 'react';
+import { FaBox, FaUser, FaMapMarkerAlt, FaSignOutAlt } from 'react-icons/fa';
 
 export function shouldRevalidate() {
   return true;
@@ -168,7 +169,7 @@ export default function AccountLayout() {
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0 fixed md:static inset-y-0 left-0 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-30`}
         >
-          <div className="p-6">
+          <div className="p-6 rounded-r-xl">
             <h2 className="text-xl font-semibold text-gray-800">Account Menu</h2>
             <AccountMenu />
           </div>
@@ -210,18 +211,25 @@ function AccountMenu() {
   }
 
   return (
-    <nav className="mt-6 space-y-2 min-h-screen flex flex-col">
-      <NavLink to="/account/orders">
+       <nav className="mt-6 space-y-2 min-h-screen flex flex-col">
+      <NavLink to="/account/orders" className="flex items-center gap-2 text-gray-700 hover:text-black transition">
+        <FaBox className="text-lg" />
         Orders
       </NavLink>
-      <NavLink to="/account/profile">
+      <NavLink to="/account/profile" className="flex items-center gap-2 text-gray-700 hover:text-black transition">
+        <FaUser className="text-lg" />
         Profile
       </NavLink>
-      <NavLink to="/account/addresses">
+      <NavLink to="/account/addresses" className="flex items-center gap-2 text-gray-700 hover:text-black transition">
+        <FaMapMarkerAlt className="text-lg" />
         Addresses
       </NavLink>
-      <Logout />
+      <div className="flex items-center gap-2 text-gray-700 hover:text-black transition cursor-pointer">
+        <FaSignOutAlt className="text-lg" />
+        <Logout />
+      </div>
     </nav>
+
   );
 }
 

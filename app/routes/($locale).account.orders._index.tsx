@@ -103,12 +103,14 @@ import {
 } from '@shopify/hydrogen';
 import { type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { CUSTOMER_ORDERS_QUERY } from '~/graphql/customer-account/CustomerOrdersQuery';
+import Button from '~/components/mini/Button';
 import type {
   CustomerOrdersFragment,
   OrderItemFragment,
 } from 'customer-accountapi.generated';
 import { PaginatedResourceSection } from '~/components/PaginatedResourceSection';
 import { FaShoppingCart } from 'react-icons/fa';
+import { LuSquareArrowOutUpRight } from "react-icons/lu";
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Your Orders' }];
@@ -142,6 +144,7 @@ interface LoaderData {
 export default function Orders() {
   const { customer } = useLoaderData<LoaderData>();
   const { orders } = customer;
+  console.log('consoling the order',orders)
   const hasOrders = orders.nodes.length > 0;
 
   return (
@@ -214,15 +217,15 @@ function OrderItem({ order, isDummy = false }: OrderItemProps) {
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md p-4 ${
+      className={`bg-white rounded-lg shadow-md mt-5 p-4 ${
         isDummy ? 'opacity-60' : ''
       }`}
     >
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div>
           <Link
             to={`/account/orders/${btoa(order.id)}`}
-            className="font-semibold text-blue-600 hover:underline"
+            className="text-black font-bold hover:underline"
           >
             Order #{order.number}
           </Link>
@@ -256,9 +259,10 @@ function OrderItem({ order, isDummy = false }: OrderItemProps) {
         <div>
           <Link
             to={`/account/orders/${btoa(order.id)}`}
-            className="text-blue-600 hover:underline text-sm font-medium"
+            className="text-blue-600 cursor-pointer text-sm font-medium"
           >
-            View Order Details
+            <Button text='View Order Details' bgColor='bg-black' icon={<LuSquareArrowOutUpRight/>}/>
+            
           </Link>
         </div>
       </div>
