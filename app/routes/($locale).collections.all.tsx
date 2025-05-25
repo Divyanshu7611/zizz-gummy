@@ -50,6 +50,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 
 export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
+  console.log('the product items are',products)
 
   return (
     <div className="inter">
@@ -80,6 +81,7 @@ export default function Collection() {
   );
 }
 
+
 const COLLECTION_ITEM_FRAGMENT = `#graphql
   fragment MoneyCollectionItem on MoneyV2 {
     amount
@@ -89,12 +91,31 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    productType
+    tags
     featuredImage {
       id
       altText
       url
       width
       height
+    }
+    variants(first: 3) {
+      nodes {
+        id
+        title
+        availableForSale
+        price {
+          ...MoneyCollectionItem
+        }
+        compareAtPrice {
+          ...MoneyCollectionItem
+        }
+        selectedOptions {
+          name
+          value
+        }
+      }
     }
     priceRange {
       minVariantPrice {
@@ -104,10 +125,25 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
         ...MoneyCollectionItem
       }
     }
+    metafields(identifiers: [{namespace: "custom", key: "short_description"}]) {
+      id
+      namespace
+      key
+      value
+    }
+    sellingPlanGroups(first: 1) {
+      nodes {
+        sellingPlans(first: 1) {
+          nodes {
+            id
+            name
+          }
+        }
+      }
+    }
   }
 ` as const;
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/product
 const CATALOG_QUERY = `#graphql
   query Catalog(
     $country: CountryCode

@@ -31,7 +31,7 @@ const testimonials = [
 
 const TestimonialSlider: React.FC = () => {
   return (
-    <section className="py-12 px-4 bg-[#FAFAFA] text-center">
+    <section className="py-12 px-4 bg-[#FAFAFA] text-center max-w-[1440px] mx-auto">
       <h3 className="text-2xl md:text-4xl font-bold mb-10 text-[#1F1F1F]">What Experts are Saying</h3>
 
       <Swiper
