@@ -1,23 +1,225 @@
-import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, type MetaFunction} from '@remix-run/react';
-import {Money, Image, flattenConnection} from '@shopify/hydrogen';
-import type {OrderLineItemFullFragment} from 'customer-accountapi.generated';
-import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuery';
+// import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+// import {useLoaderData, type MetaFunction} from '@remix-run/react';
+// import {Money, Image, flattenConnection} from '@shopify/hydrogen';
+// import type {OrderLineItemFullFragment} from 'customer-accountapi.generated';
+// import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuery';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Order ${data?.order?.name}`}];
+// export const meta: MetaFunction<typeof loader> = ({data}) => {
+//   return [{title: `Order ${data?.order?.name}`}];
+// };
+
+// export async function loader({params, context}: LoaderFunctionArgs) {
+//   if (!params.id) {
+//     return redirect('/account/orders');
+//   }
+
+//   const orderId = atob(params.id);
+//   const {data, errors} = await context.customerAccount.query(
+//     CUSTOMER_ORDER_QUERY,
+//     {
+//       variables: {orderId},
+//     },
+//   );
+
+//   if (errors?.length || !data?.order) {
+//     throw new Error('Order not found');
+//   }
+
+//   const {order} = data;
+
+//   const lineItems = flattenConnection(order.lineItems);
+//   const discountApplications = flattenConnection(order.discountApplications);
+
+//   const fulfillmentStatus =
+//     flattenConnection(order.fulfillments)[0]?.status ?? 'N/A';
+
+//   const firstDiscount = discountApplications[0]?.value;
+
+//   const discountValue =
+//     firstDiscount?.__typename === 'MoneyV2' && firstDiscount;
+
+//   const discountPercentage =
+//     firstDiscount?.__typename === 'PricingPercentageValue' &&
+//     firstDiscount?.percentage;
+
+//   return {
+//     order,
+//     lineItems,
+//     discountValue,
+//     discountPercentage,
+//     fulfillmentStatus,
+//   };
+// }
+
+// export default function OrderRoute() {
+//   const {
+//     order,
+//     lineItems,
+//     discountValue,
+//     discountPercentage,
+//     fulfillmentStatus,
+//   } = useLoaderData<typeof loader>();
+//   return (
+//     <div className="account-order">
+//       <h2>Order {order.name}</h2>
+//       <p>Placed on {new Date(order.processedAt!).toDateString()}</p>
+//       <br />
+//       <div>
+//         <table>
+//           <thead>
+//             <tr>
+//               <th scope="col">Product</th>
+//               <th scope="col">Price</th>
+//               <th scope="col">Quantity</th>
+//               <th scope="col">Total</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {lineItems.map((lineItem, lineItemIndex) => (
+//               // eslint-disable-next-line react/no-array-index-key
+//               <OrderLineRow key={lineItemIndex} lineItem={lineItem} />
+//             ))}
+//           </tbody>
+//           <tfoot>
+//             {((discountValue && discountValue.amount) ||
+//               discountPercentage) && (
+//               <tr>
+//                 <th scope="row" colSpan={3}>
+//                   <p>Discounts</p>
+//                 </th>
+//                 <th scope="row">
+//                   <p>Discounts</p>
+//                 </th>
+//                 <td>
+//                   {discountPercentage ? (
+//                     <span>-{discountPercentage}% OFF</span>
+//                   ) : (
+//                     discountValue && <Money data={discountValue!} />
+//                   )}
+//                 </td>
+//               </tr>
+//             )}
+//             <tr>
+//               <th scope="row" colSpan={3}>
+//                 <p>Subtotal</p>
+//               </th>
+//               <th scope="row">
+//                 <p>Subtotal</p>
+//               </th>
+//               <td>
+//                 <Money data={order.subtotal!} />
+//               </td>
+//             </tr>
+//             <tr>
+//               <th scope="row" colSpan={3}>
+//                 Tax
+//               </th>
+//               <th scope="row">
+//                 <p>Tax</p>
+//               </th>
+//               <td>
+//                 <Money data={order.totalTax!} />
+//               </td>
+//             </tr>
+//             <tr>
+//               <th scope="row" colSpan={3}>
+//                 Total
+//               </th>
+//               <th scope="row">
+//                 <p>Total</p>
+//               </th>
+//               <td>
+//                 <Money data={order.totalPrice!} />
+//               </td>
+//             </tr>
+//           </tfoot>
+//         </table>
+//         <div>
+//           <h3>Shipping Address</h3>
+//           {order?.shippingAddress ? (
+//             <address>
+//               <p>{order.shippingAddress.name}</p>
+//               {order.shippingAddress.formatted ? (
+//                 <p>{order.shippingAddress.formatted}</p>
+//               ) : (
+//                 ''
+//               )}
+//               {order.shippingAddress.formattedArea ? (
+//                 <p>{order.shippingAddress.formattedArea}</p>
+//               ) : (
+//                 ''
+//               )}
+//             </address>
+//           ) : (
+//             <p>No shipping address defined</p>
+//           )}
+//           <h3>Status</h3>
+//           <div>
+//             <p>{fulfillmentStatus}</p>
+//           </div>
+//         </div>
+//       </div>
+//       <br />
+//       <p>
+//         <a target="_blank" href={order.statusPageUrl} rel="noreferrer">
+//           View Order Status →
+//         </a>
+//       </p>
+//     </div>
+//   );
+// }
+
+// function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
+//   return (
+//     <tr key={lineItem.id}>
+//       <td>
+//         <div>
+//           {lineItem?.image && (
+//             <div>
+//               <Image data={lineItem.image} width={96} height={96} />
+//             </div>
+//           )}
+//           <div>
+//             <p>{lineItem.title}</p>
+//             <small>{lineItem.variantTitle}</small>
+//           </div>
+//         </div>
+//       </td>
+//       <td>
+//         <Money data={lineItem.price!} />
+//       </td>
+//       <td>{lineItem.quantity}</td>
+//       <td>
+//         <Money data={lineItem.totalDiscount!} />
+//       </td>
+//     </tr>
+//   );
+// }
+
+
+
+
+import { redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, type MetaFunction } from '@remix-run/react';
+import { Money, Image, flattenConnection } from '@shopify/hydrogen';
+import type { OrderLineItemFullFragment } from 'customer-accountapi.generated';
+import { CUSTOMER_ORDER_QUERY } from '~/graphql/customer-account/CustomerOrderQuery';
+import { FaBoxOpen, FaCalendarAlt, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Order ${data?.order?.name}` }];
 };
 
-export async function loader({params, context}: LoaderFunctionArgs) {
+export async function loader({ params, context }: LoaderFunctionArgs) {
   if (!params.id) {
     return redirect('/account/orders');
   }
 
   const orderId = atob(params.id);
-  const {data, errors} = await context.customerAccount.query(
+  const { data, errors } = await context.customerAccount.query(
     CUSTOMER_ORDER_QUERY,
     {
-      variables: {orderId},
+      variables: { orderId },
     },
   );
 
@@ -25,7 +227,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Error('Order not found');
   }
 
-  const {order} = data;
+  const { order } = data;
 
   const lineItems = flattenConnection(order.lineItems);
   const discountApplications = flattenConnection(order.discountApplications);
@@ -51,6 +253,14 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   };
 }
 
+interface LoaderData {
+  order: any;
+  lineItems: OrderLineItemFullFragment[];
+  discountValue?: any;
+  discountPercentage?: number;
+  fulfillmentStatus: string;
+}
+
 export default function OrderRoute() {
   const {
     order,
@@ -58,138 +268,160 @@ export default function OrderRoute() {
     discountValue,
     discountPercentage,
     fulfillmentStatus,
-  } = useLoaderData<typeof loader>();
+  } = useLoaderData<LoaderData>();
+
   return (
-    <div className="account-order">
-      <h2>Order {order.name}</h2>
-      <p>Placed on {new Date(order.processedAt!).toDateString()}</p>
-      <br />
+    <div className="account-order p-6 mx-auto">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+        <FaBoxOpen className="mr-2 text-blue-600" />
+        Order {order.name}
+      </h2>
+      <p className="text-gray-600 mb-6 flex items-center">
+        <FaCalendarAlt className="mr-2 text-gray-500" />
+        Placed on {new Date(order.processedAt!).toLocaleDateString()}
+      </p>
+
       <div>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lineItems.map((lineItem, lineItemIndex) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <OrderLineRow key={lineItemIndex} lineItem={lineItem} />
-            ))}
-          </tbody>
-          <tfoot>
-            {((discountValue && discountValue.amount) ||
-              discountPercentage) && (
+        {/* Order Items Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="px-4 py-3 text-left">Product</th>
+                <th className="px-4 py-3 text-left">Price</th>
+                <th className="px-4 py-3 text-left">Quantity</th>
+                <th className="px-4 py-3 text-left">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lineItems.map((lineItem, index) => (
+                <OrderLineRow key={lineItem.id || index} lineItem={lineItem} />
+              ))}
+            </tbody>
+            <tfoot className="border-t">
+              {((discountValue && discountValue.amount) || discountPercentage) && (
+                <tr>
+                  <td colSpan={3} className="px-4 py-3 font-semibold text-gray-700">
+                    Discounts
+                  </td>
+                  <td className="px-4 py-3 text-gray-700">
+                    {discountPercentage ? (
+                      <span>-{discountPercentage}% OFF</span>
+                    ) : (
+                      discountValue && <Money data={discountValue} />
+                    )}
+                  </td>
+                </tr>
+              )}
               <tr>
-                <th scope="row" colSpan={3}>
-                  <p>Discounts</p>
-                </th>
-                <th scope="row">
-                  <p>Discounts</p>
-                </th>
-                <td>
-                  {discountPercentage ? (
-                    <span>-{discountPercentage}% OFF</span>
-                  ) : (
-                    discountValue && <Money data={discountValue!} />
-                  )}
+                <td colSpan={3} className="px-4 py-3 font-semibold text-gray-700">
+                  Subtotal
+                </td>
+                <td className="px-4 py-3 text-gray-700">
+                  <Money data={order.subtotal!} />
                 </td>
               </tr>
-            )}
-            <tr>
-              <th scope="row" colSpan={3}>
-                <p>Subtotal</p>
-              </th>
-              <th scope="row">
-                <p>Subtotal</p>
-              </th>
-              <td>
-                <Money data={order.subtotal!} />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" colSpan={3}>
-                Tax
-              </th>
-              <th scope="row">
-                <p>Tax</p>
-              </th>
-              <td>
-                <Money data={order.totalTax!} />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" colSpan={3}>
-                Total
-              </th>
-              <th scope="row">
-                <p>Total</p>
-              </th>
-              <td>
-                <Money data={order.totalPrice!} />
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-        <div>
-          <h3>Shipping Address</h3>
-          {order?.shippingAddress ? (
-            <address>
-              <p>{order.shippingAddress.name}</p>
-              {order.shippingAddress.formatted ? (
-                <p>{order.shippingAddress.formatted}</p>
-              ) : (
-                ''
-              )}
-              {order.shippingAddress.formattedArea ? (
-                <p>{order.shippingAddress.formattedArea}</p>
-              ) : (
-                ''
-              )}
-            </address>
-          ) : (
-            <p>No shipping address defined</p>
-          )}
-          <h3>Status</h3>
+              <tr>
+                <td colSpan={3} className="px-4 py-3 font-semibold text-gray-700">
+                  Tax
+                </td>
+                <td className="px-4 py-3 text-gray-700">
+                  <Money data={order.totalTax!} />
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={3} className="px-4 py-3 font-bold text-gray-800">
+                  Total
+                </td>
+                <td className="px-4 py-3 font-bold text-gray-800">
+                  <Money data={order.totalPrice!} />
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        {/* Shipping and Status */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p>{fulfillmentStatus}</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+              <FaMapMarkerAlt className="mr-2 text-blue-600" />
+              Shipping Address
+            </h3>
+            {order?.shippingAddress ? (
+              <address className="text-gray-600 not-italic">
+                <p>{order.shippingAddress.name}</p>
+                {order.shippingAddress.formatted && (
+                  <p>{order.shippingAddress.formatted.join(', ')}</p>
+                )}
+                {order.shippingAddress.formattedArea && (
+                  <p>{order.shippingAddress.formattedArea}</p>
+                )}
+              </address>
+            ) : (
+              <p className="text-gray-600">No shipping address defined</p>
+            )}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Status</h3>
+            <p
+              className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                fulfillmentStatus === 'SUCCESS'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-yellow-100 text-yellow-800'
+              }`}
+            >
+              {fulfillmentStatus}
+            </p>
           </div>
         </div>
+
+        {/* Order Status Link */}
+        <div className="mt-6">
+          <a
+            target="_blank"
+            href={order.statusPageUrl}
+            rel="noreferrer"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            View Order Status <FaExternalLinkAlt className="ml-2" />
+          </a>
+        </div>
       </div>
-      <br />
-      <p>
-        <a target="_blank" href={order.statusPageUrl} rel="noreferrer">
-          View Order Status →
-        </a>
-      </p>
     </div>
   );
 }
 
-function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
+interface OrderLineRowProps {
+  lineItem: OrderLineItemFullFragment;
+}
+
+function OrderLineRow({ lineItem }: OrderLineRowProps) {
   return (
-    <tr key={lineItem.id}>
-      <td>
-        <div>
+    <tr className="border-b last:border-b-0">
+      <td className="px-4 py-3">
+        <div className="flex items-center">
           {lineItem?.image && (
-            <div>
-              <Image data={lineItem.image} width={96} height={96} />
+            <div className="mr-4">
+              <Image
+                data={lineItem.image}
+                width={64}
+                height={64}
+                className="rounded-md object-cover"
+              />
             </div>
           )}
           <div>
-            <p>{lineItem.title}</p>
-            <small>{lineItem.variantTitle}</small>
+            <p className="font-medium text-gray-800">{lineItem.title}</p>
+            <p className="text-sm text-gray-500">{lineItem.variantTitle}</p>
           </div>
         </div>
       </td>
-      <td>
+      <td className="px-4 py-3">
         <Money data={lineItem.price!} />
       </td>
-      <td>{lineItem.quantity}</td>
-      <td>
+      <td className="px-4 py-3">{lineItem.quantity}</td>
+      <td className="px-4 py-3">
         <Money data={lineItem.totalDiscount!} />
       </td>
     </tr>
