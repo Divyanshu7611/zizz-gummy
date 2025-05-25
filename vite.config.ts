@@ -38,7 +38,7 @@ export default defineConfig({
     host:true,
     allowedHosts:[
       'localhost',
-      '2e4c-2401-4900-7aa5-9094-5008-fb84-dcb7-788b.ngrok-free.app',
+      'f4b3-2401-4900-7aab-6335-29c1-e778-dae9-a1c2.ngrok-free.app',
     ],
   },
   ssr: {
