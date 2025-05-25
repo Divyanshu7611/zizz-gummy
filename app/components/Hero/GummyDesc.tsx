@@ -3,7 +3,7 @@ import { Image } from '@shopify/hydrogen';
 
 function GummyDesc() {
   return (
-    <div className="w-full flex flex-col-reverse md:flex-row items-stretch justify-between px-4 md:px-16 lg:px-0 py-8 gap-8">
+    <div className="w-full flex flex-col-reverse md:flex-row items-stretch justify-between px-4 md:px-16 lg:px-0 py-8 gap-8 max-w-[1440px] mx-auto">
       {/* Text Section */}
       <div className="flex flex-col gap-4 w-full md:max-w-xl text-center md:text-left justify-center">
         <h1 className="text-[#000000] text-2xl md:text-4xl font-bold inter">

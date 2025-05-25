@@ -317,16 +317,50 @@ export type FeaturedCollectionQuery = {
   };
 };
 
+export type MoneyRecommendedProductFragment = Pick<
+  StorefrontAPI.MoneyV2,
+  'amount' | 'currencyCode'
+>;
+
 export type RecommendedProductFragment = Pick<
   StorefrontAPI.Product,
-  'id' | 'title' | 'handle'
+  'id' | 'title' | 'handle' | 'productType' | 'tags'
 > & {
   priceRange: {
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+    maxVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
   };
   featuredImage?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
   >;
+  variants: {
+    nodes: Array<
+      Pick<
+        StorefrontAPI.ProductVariant,
+        'id' | 'title' | 'availableForSale'
+      > & {
+        price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+        compareAtPrice?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+        >;
+        selectedOptions: Array<
+          Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+        >;
+      }
+    >;
+  };
+  metafields: Array<
+    StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.Metafield, 'id' | 'namespace' | 'key' | 'value'>
+    >
+  >;
+  sellingPlanGroups: {
+    nodes: Array<{
+      sellingPlans: {
+        nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+      };
+    }>;
+  };
 };
 
 export type RecommendedProductsQueryVariables = StorefrontAPI.Exact<{
@@ -337,9 +371,16 @@ export type RecommendedProductsQueryVariables = StorefrontAPI.Exact<{
 export type RecommendedProductsQuery = {
   products: {
     nodes: Array<
-      Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'> & {
+      Pick<
+        StorefrontAPI.Product,
+        'id' | 'title' | 'handle' | 'productType' | 'tags'
+      > & {
         priceRange: {
           minVariantPrice: Pick<
+            StorefrontAPI.MoneyV2,
+            'amount' | 'currencyCode'
+          >;
+          maxVariantPrice: Pick<
             StorefrontAPI.MoneyV2,
             'amount' | 'currencyCode'
           >;
@@ -350,6 +391,34 @@ export type RecommendedProductsQuery = {
             'id' | 'url' | 'altText' | 'width' | 'height'
           >
         >;
+        variants: {
+          nodes: Array<
+            Pick<
+              StorefrontAPI.ProductVariant,
+              'id' | 'title' | 'availableForSale'
+            > & {
+              price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+              compareAtPrice?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+              >;
+              selectedOptions: Array<
+                Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+              >;
+            }
+          >;
+        };
+        metafields: Array<
+          StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Metafield, 'id' | 'namespace' | 'key' | 'value'>
+          >
+        >;
+        sellingPlanGroups: {
+          nodes: Array<{
+            sellingPlans: {
+              nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+            };
+          }>;
+        };
       }
     >;
   };
@@ -590,14 +659,42 @@ export type MoneyCollectionItemFragment = Pick<
 
 export type CollectionItemFragment = Pick<
   StorefrontAPI.Product,
-  'id' | 'handle' | 'title'
+  'id' | 'handle' | 'title' | 'productType' | 'tags'
 > & {
   featuredImage?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'id' | 'altText' | 'url' | 'width' | 'height'>
   >;
+  variants: {
+    nodes: Array<
+      Pick<
+        StorefrontAPI.ProductVariant,
+        'id' | 'title' | 'availableForSale'
+      > & {
+        price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+        compareAtPrice?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+        >;
+        selectedOptions: Array<
+          Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+        >;
+      }
+    >;
+  };
   priceRange: {
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
     maxVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+  };
+  metafields: Array<
+    StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.Metafield, 'id' | 'namespace' | 'key' | 'value'>
+    >
+  >;
+  sellingPlanGroups: {
+    nodes: Array<{
+      sellingPlans: {
+        nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+      };
+    }>;
   };
 };
 
@@ -617,13 +714,32 @@ export type CatalogQueryVariables = StorefrontAPI.Exact<{
 export type CatalogQuery = {
   products: {
     nodes: Array<
-      Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+      Pick<
+        StorefrontAPI.Product,
+        'id' | 'handle' | 'title' | 'productType' | 'tags'
+      > & {
         featuredImage?: StorefrontAPI.Maybe<
           Pick<
             StorefrontAPI.Image,
             'id' | 'altText' | 'url' | 'width' | 'height'
           >
         >;
+        variants: {
+          nodes: Array<
+            Pick<
+              StorefrontAPI.ProductVariant,
+              'id' | 'title' | 'availableForSale'
+            > & {
+              price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+              compareAtPrice?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+              >;
+              selectedOptions: Array<
+                Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+              >;
+            }
+          >;
+        };
         priceRange: {
           minVariantPrice: Pick<
             StorefrontAPI.MoneyV2,
@@ -633,6 +749,18 @@ export type CatalogQuery = {
             StorefrontAPI.MoneyV2,
             'amount' | 'currencyCode'
           >;
+        };
+        metafields: Array<
+          StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Metafield, 'id' | 'namespace' | 'key' | 'value'>
+          >
+        >;
+        sellingPlanGroups: {
+          nodes: Array<{
+            sellingPlans: {
+              nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+            };
+          }>;
         };
       }
     >;
@@ -1344,7 +1472,7 @@ interface GeneratedQueryTypes {
     return: FeaturedCollectionQuery;
     variables: FeaturedCollectionQueryVariables;
   };
-  '#graphql\n  fragment RecommendedProduct on Product {\n    id\n    title\n    handle\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 4, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...RecommendedProduct\n      }\n    }\n  }\n': {
+  '#graphql\n  fragment MoneyRecommendedProduct on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment RecommendedProduct on Product {\n    id\n    title\n    handle\n    productType\n    tags\n    priceRange {\n      minVariantPrice {\n        ...MoneyRecommendedProduct\n      }\n      maxVariantPrice {\n        ...MoneyRecommendedProduct\n      }\n    }\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    variants(first: 3) {\n      nodes {\n        id\n        title\n        availableForSale\n        price {\n          ...MoneyRecommendedProduct\n        }\n        compareAtPrice {\n          ...MoneyRecommendedProduct\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n    metafields(identifiers: [{namespace: "custom", key: "short_description"}]) {\n      id\n      namespace\n      key\n      value\n    }\n    sellingPlanGroups(first: 1) {\n      nodes {\n        sellingPlans(first: 1) {\n          nodes {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 4, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...RecommendedProduct\n      }\n    }\n  }\n': {
     return: RecommendedProductsQuery;
     variables: RecommendedProductsQueryVariables;
   };
@@ -1368,7 +1496,7 @@ interface GeneratedQueryTypes {
     return: StoreCollectionsQuery;
     variables: StoreCollectionsQueryVariables;
   };
-  '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...CollectionItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyCollectionItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment CollectionItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyCollectionItem\n      }\n      maxVariantPrice {\n        ...MoneyCollectionItem\n      }\n    }\n  }\n\n': {
+  '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...CollectionItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyCollectionItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment CollectionItem on Product {\n    id\n    handle\n    title\n    productType\n    tags\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    variants(first: 3) {\n      nodes {\n        id\n        title\n        availableForSale\n        price {\n          ...MoneyCollectionItem\n        }\n        compareAtPrice {\n          ...MoneyCollectionItem\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyCollectionItem\n      }\n      maxVariantPrice {\n        ...MoneyCollectionItem\n      }\n    }\n    metafields(identifiers: [{namespace: "custom", key: "short_description"}]) {\n      id\n      namespace\n      key\n      value\n    }\n    sellingPlanGroups(first: 1) {\n      nodes {\n        sellingPlans(first: 1) {\n          nodes {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n\n': {
     return: CatalogQuery;
     variables: CatalogQueryVariables;
   };

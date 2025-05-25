@@ -34,6 +34,13 @@ export default defineConfig({
     // withtout inlining assets as base64:
     assetsInlineLimit: 0,
   },
+  server:{
+    host:true,
+    allowedHosts:[
+      'localhost',
+      '2e4c-2401-4900-7aa5-9094-5008-fb84-dcb7-788b.ngrok-free.app',
+    ],
+  },
   ssr: {
     optimizeDeps: {
       /**

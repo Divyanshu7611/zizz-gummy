@@ -96,7 +96,7 @@ import { Image } from '@shopify/hydrogen'
 
 function ProductSection() {
   return (
-    <div className='mt-10'>
+    <div className='mt-10 max-w-[1440px] mx-auto'>
         <h3 className="text-2xl font-bold mb-2 text-center md:text-4xl text-[#000000]">
         Your Daily Dose of Health Now in a Gummy!
       </h3>
