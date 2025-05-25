@@ -139,6 +139,7 @@
 
 import type { CustomerFragment } from 'customer-accountapi.generated';
 import type { CustomerUpdateInput } from '@shopify/hydrogen/customer-account-api-types';
+import Button from '~/components/mini/Button';
 import { CUSTOMER_UPDATE_MUTATION } from '~/graphql/customer-account/CustomerUpdateMutation';
 import {
   data,
@@ -234,7 +235,7 @@ export default function AccountProfile() {
     <div className="account-profile p-6 md:p-8">
       <div>
         <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-          <FaUser className="mr-3 text-blue-600 text-2xl" />
+          <FaUser className="mr-3 text-black text-2xl" />
           My Profile
         </h2>
         <Form method="PUT" className="space-y-6">
@@ -291,7 +292,7 @@ export default function AccountProfile() {
             <button
               type="submit"
               disabled={state !== 'idle'}
-              className={`flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors text-base ${
+              className={`flex items-center justify-center px-6 py-3 bg-black text-white font-semibold rounded-md hover:-translate-y-1 cursor-pointer transition-all duration-200 text-base ${
                 state !== 'idle' ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

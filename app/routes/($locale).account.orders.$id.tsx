@@ -205,6 +205,7 @@ import { Money, Image, flattenConnection } from '@shopify/hydrogen';
 import type { OrderLineItemFullFragment } from 'customer-accountapi.generated';
 import { CUSTOMER_ORDER_QUERY } from '~/graphql/customer-account/CustomerOrderQuery';
 import { FaBoxOpen, FaCalendarAlt, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
+import Button from '~/components/mini/Button';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Order ${data?.order?.name}` }];
@@ -273,7 +274,7 @@ export default function OrderRoute() {
   return (
     <div className="account-order p-6 mx-auto">
       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <FaBoxOpen className="mr-2 text-blue-600" />
+        <FaBoxOpen className="mr-2 text-black" />
         Order {order.name}
       </h2>
       <p className="text-gray-600 mb-6 flex items-center">
@@ -345,7 +346,7 @@ export default function OrderRoute() {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-blue-600" />
+              <FaMapMarkerAlt className="mr-2 text-[#66BB6A]" />
               Shipping Address
             </h3>
             {order?.shippingAddress ? (
@@ -367,7 +368,7 @@ export default function OrderRoute() {
             <p
               className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
                 fulfillmentStatus === 'SUCCESS'
-                  ? 'bg-green-100 text-green-800'
+                  ? 'bg-[#66BB6A] text-green-800'
                   : 'bg-yellow-100 text-yellow-800'
               }`}
             >
@@ -382,9 +383,8 @@ export default function OrderRoute() {
             target="_blank"
             href={order.statusPageUrl}
             rel="noreferrer"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
-            View Order Status <FaExternalLinkAlt className="ml-2" />
+            <Button text='View Order Status' bgColor='bg-black' icon={<FaExternalLinkAlt/>}/>
           </a>
         </div>
       </div>

@@ -712,10 +712,10 @@ export default function Addresses() {
   return (
     <div className="account-addresses">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-        <FaMapMarkerAlt className="mr-3 text-blue-600 text-2xl" />
+        <FaMapMarkerAlt className="mr-3 text-black text-2xl" />
         Your Addresses
       </h2>
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div>
         {!addresses.nodes.length ? (
           <div className="text-center py-12">
             <FaMapMarkerAlt className="mx-auto text-5xl text-gray-400 mb-4" />
@@ -790,7 +790,7 @@ function NewAddressForm({ onClose }: NewAddressFormProps) {
             disabled={stateForMethod('POST') !== 'idle'}
             formMethod="POST"
             type="submit"
-            className={`flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors ${
+            className={`flex items-center px-4 py-2 bg-black text-white rounded-md transition-colors ${
               stateForMethod('POST') !== 'idle' ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -810,9 +810,9 @@ interface ExistingAddressesProps {
 
 function ExistingAddresses({ addresses, defaultAddress }: ExistingAddressesProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       <h3 className="text-xl font-semibold text-gray-800">Existing Addresses</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
         {addresses.nodes.map((address) => (
           <AddressForm
             key={address.id}
@@ -826,7 +826,7 @@ function ExistingAddresses({ addresses, defaultAddress }: ExistingAddressesProps
                   disabled={stateForMethod('PUT') !== 'idle'}
                   formMethod="PUT"
                   type="submit"
-                  className={`flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors ${
+                  className={`flex items-center px-4 py-2 bg-black text-white rounded-md transition-colors ${
                     stateForMethod('PUT') !== 'idle' ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
@@ -874,8 +874,8 @@ export function AddressForm({
   const isDefaultAddress = defaultAddress?.id === addressId;
 
   return (
-    <Form id={addressId} className="bg-gray-50 p-6 rounded-lg shadow-sm">
-      <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Form id={addressId}>
+      <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <input type="hidden" name="addressId" defaultValue={addressId} />
         <div>
           <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
