@@ -154,7 +154,7 @@ export default function AboutPage() {
       <WhatIsZizz />
       <VisionAndMission />
       <WhyZizzExist />
-      <Image src="/static/AboutPageDesc.png" alt="Gummy About Description" />
+      <Image src="/static/AboutPageDesc.png" alt="Gummy About Description" className='md:h-[520px] h-[200px]'/>
       <Suspense fallback={<div>Loading recommended products...</div>}>
         <Await resolve={recommendedProducts}>
           {(response) => (
