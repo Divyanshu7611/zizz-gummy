@@ -56,7 +56,7 @@ export default function Collection() {
     <div className="inter">
       <div className='bg-[#B0EACD] w-full py-32 flex justify-center items-center flex-col'>
         <h1 className='text-[40px] font-bold text-center'>Your Daily Rituals, Reinvented</h1>
-        <p className='text-center text-xl max-w-xl'>Scientifically formulated gummies to support sleep, recovery, and radiance—naturally</p>
+        <p className='text-center text-2xl max-w-2xl mt-3'>Scientifically formulated gummies to support sleep, recovery, and radiance—naturally</p>
       </div>
 
       <h1 className='text-center text-4xl text-[#1F1F1F] font-bold py-10 inter'>Explore Our Gummies</h1>
