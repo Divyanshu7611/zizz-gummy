@@ -1528,6 +1528,10 @@ interface GeneratedQueryTypes {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
   };
+  '#graphql\n  fragment MoneyRecommendedProduct on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment RecommendedProduct on Product {\n    id\n    title\n    handle\n    productType\n    tags\n    priceRange {\n      minVariantPrice {\n        ...MoneyRecommendedProduct\n      }\n      maxVariantPrice {\n        ...MoneyRecommendedProduct\n      }\n    }\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    variants(first: 3) {\n      nodes {\n        id\n        title\n        availableForSale\n        price {\n          ...MoneyRecommendedProduct\n        }\n        compareAtPrice {\n          ...MoneyRecommendedProduct\n        }\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n    metafields(identifiers: [{ namespace: "custom", key: "short_description" }]) {\n      id\n      namespace\n      key\n      value\n    }\n    sellingPlanGroups(first: 1) {\n      nodes {\n        sellingPlans(first: 1) {\n          nodes {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n\n  query RecommendedProducts($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 4, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...RecommendedProduct\n      }\n    }\n  }\n': {
+    return: RecommendedProductsQuery;
+    variables: RecommendedProductsQueryVariables;
+  };
 }
 
 interface GeneratedMutationTypes {}
