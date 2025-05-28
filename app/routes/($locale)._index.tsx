@@ -1,314 +1,48 @@
-// import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-// import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-// import { BsArrowUpRightCircle } from "react-icons/bs";
-// import {Suspense} from 'react';
-// import {Image, Money} from '@shopify/hydrogen';
-// import Hero from '~/components/Hero/Hero';
-// import Button from '~/components/mini/Button';
-// import BriefCards from '~/components/Hero/BriefCards';
-// import GummyDesc from '~/components/Hero/GummyDesc';
-// import GummyProductSection from '~/components/Hero/ProductSection';
-// import TestimonialSlider from '~/components/Hero/TestimonialSlider';
-// import type {
-//   FeaturedCollectionFragment,
-//   RecommendedProductsQuery,
-// } from 'storefrontapi.generated';
-// import {ProductItem} from '~/components/ProductItem';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Autoplay } from 'swiper/modules';
-
-// export const meta: MetaFunction = () => {
-//   return [{title: 'Hydrogen | Home'}];
-// };
-
-// export async function loader(args: LoaderFunctionArgs) {
-//   // Start fetching non-critical data without blocking time to first byte
-//   const deferredData = loadDeferredData(args);
-
-//   // Await the critical data required to render initial state of the page
-//   const criticalData = await loadCriticalData(args);
-
-//   return {...deferredData, ...criticalData};
-// }
-
-// /**
-//  * Load data necessary for rendering content above the fold. This is the critical data
-//  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
-//  */
-// async function loadCriticalData({context}: LoaderFunctionArgs) {
-//   const [{collections}] = await Promise.all([
-//     context.storefront.query(FEATURED_COLLECTION_QUERY),
-//     // Add other queries here, so that they are loaded in parallel
-//   ]);
-
-//   return {
-//     featuredCollection: collections.nodes[0],
-//   };
-// }
-
-// /**
-//  * Load data for rendering content below the fold. This data is deferred and will be
-//  * fetched after the initial page load. If it's unavailable, the page should still 200.
-//  * Make sure to not throw any errors here, as it will cause the page to 500.
-//  */
-// function loadDeferredData({context}: LoaderFunctionArgs) {
-//   const recommendedProducts = context.storefront
-//     .query(RECOMMENDED_PRODUCTS_QUERY)
-//     .catch((error) => {
-//       // Log query errors, but don't throw them so the page can still render
-//       console.error(error);
-//       return null;
-//     });
-
-//   return {
-//     recommendedProducts,
-//   };
-// }
-
-// export default function Homepage() {
-//   const data = useLoaderData<typeof loader>();
-//   return (
-//     <>
-//     <div className='min-h-screen max-w-[1440px] mx-auto'>
-//       <Hero/>
-//       <BriefCards/>
-//       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
-//       <RecommendedProducts products={data.recommendedProducts} /> 
-//       <GummyDesc/>
-//       <GummyProductSection/>
-//       <div className='w-full mt-10'>
-//         <Image src='/static/coolway.png' alt='Cool Way Image'/>
-//       </div>
-//       <TestimonialSlider/>
-//     </div>
-//     </>
-//   );
-// }
-
-// function FeaturedCollection({
-//   collection,
-// }: {
-//   collection: FeaturedCollectionFragment;
-// }) {
-//   if (!collection) return null;
-//   const image = collection?.image;
-//   return (
-//     <Link
-//       className="featured-collection"
-//       to={`/collections/${collection.handle}`}
-//     >
-//       {image && (
-//         <div className="featured-collection-image">
-//           <Image data={image} sizes="100vw" />
-//         </div>
-//       )}
-//       <h1>{collection.title}</h1>
-//       {/* <p>{collection.}</p> */}
-//     </Link>
-//   );
-// }
-
-// function RecommendedProducts({
-//   products,
-// }: {
-//   products: Promise<RecommendedProductsQuery | null>;
-// }) {
-//   return (
-//     // <div className="recommended-products">
-//     //   <div className='flex items-center justify-between w-full my-10'>
-//     //   <h3 className='text-[#1F1F1F] text-4xl font-bold'>Explore Our Gummies</h3>
-//     //   <Button text='Learn More' bgColor='bg-[#1E1E1E]' icon={<BsArrowUpRightCircle/>}/> 
-//     //   </div>
-//     //   <Suspense fallback={<div>Loading...</div>}>
-//     //     <Await resolve={products}>
-
-//     //       {(response) => (
-//     //         <div className="recommended-products-grid">
-//     //           {response
-//     //             ? response.products.nodes.map((product) => (
-//     //                 <ProductItem key={product.id} product={product} /> 
-//     //               ))  
-//     //             : null}
-//     //         </div>
-//     //       )}
-//     //     </Await>
-//     //   </Suspense>
-//     //   <br />
-//     // </div>
-//       <div className="recommended-products px-2 py-8">
-//       {/* Header section */}
-//       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 my-6">
-//         <h3 className="text-[#1F1F1F] text-2xl sm:text-3xl lg:text-4xl font-bold">
-//           Explore Our Gummies
-//         </h3>
-//         <Button
-//           text="Learn More"
-//           bgColor="bg-[#1E1E1E]"
-//           icon={<BsArrowUpRightCircle />}
-//         />
-//       </div>
-
-//       {/* Product Grid / Slider */}
-//       <Suspense fallback={<div>Loading...</div>}>
-//         <Await resolve={products}>
-//           {(response) =>
-//             response ? (
-//               <div>
-//                 {/* Swiper slider for mobile */}
-//                 <div className="block md:hidden">
-//                   <Swiper
-//                     spaceBetween={16}
-//                     slidesPerView={1}
-//                     autoplay={{ delay: 2500, disableOnInteraction: false }}
-//                     modules={[Autoplay]}
-//                     grabCursor={true}
-//                   >
-//                     {response.products.nodes.map((product) => (
-//                       <SwiperSlide key={product.id}>
-//                         <ProductItem product={product} />
-//                       </SwiperSlide>
-//                     ))}
-//                   </Swiper>
-//                 </div>
-
-//                 {/* Grid for md+ */}
-//                 <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 justify-between xl:grid-cols-4 gap-6">
-//                   {response.products.nodes.map((product) => (
-//                     <ProductItem key={product.id} product={product} />
-//                   ))}
-//                 </div>
-//               </div>
-//             ) : null
-//           }
-//         </Await>
-//       </Suspense>
-//     </div>
-//   );
-// }
-
-
-
-// const FEATURED_COLLECTION_QUERY = `#graphql
-//   fragment FeaturedCollection on Collection {
-//     id
-//     title
-//     image {
-//       id
-//       url
-//       altText
-//       width
-//       height
-//     }
-//     handle
-//   }
-//   query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-//     @inContext(country: $country, language: $language) {
-//     collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-//       nodes {
-//         ...FeaturedCollection
-//       }
-//     }
-//   }
-// ` as const;
-
-// const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-//   fragment RecommendedProduct on Product {
-//     id
-//     title
-//     handle
-//     tags
-//     productType
-//     priceRange {
-//       minVariantPrice {
-//         amount
-//         currencyCode
-//       }
-//     }
-//     featuredImage {
-//       id
-//       url
-//       altText
-//       width
-//       height
-//     }
-//       variants(first: 3) {
-//       nodes {
-//         id
-//         title
-//         availableForSale
-//         price {
-//           ...MoneyRecommendedProduct
-//         }
-//         compareAtPrice {
-//           ...MoneyRecommendedProduct
-//         }
-//         selectedOptions {
-//           name
-//           value
-//         }
-//       }
-//     }
-//     metafields(identifiers: [{namespace: "custom", key: "short_description"}]) {
-//       id
-//       namespace
-//       key
-//       value
-//     }
-//     sellingPlanGroups(first: 1) {
-//       nodes {
-//         sellingPlans(first: 1) {
-//           nodes {
-//             id
-//             name
-//           }
-//         }
-//       }
-//     }
-//   }
-//   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-//     @inContext(country: $country, language: $language) {
-//     products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-//       nodes {
-//         ...RecommendedProduct
-//       }
-//     }
-//   }
-// ` as const;
-
-
-
-
-
-
-import { type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Await, useLoaderData, Link, type MetaFunction } from '@remix-run/react';
-import { BsArrowUpRightCircle } from 'react-icons/bs';
-import { Suspense } from 'react';
-import { Image, Money } from '@shopify/hydrogen';
+import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
+import {BsArrowUpRightCircle} from 'react-icons/bs';
+import {Suspense} from 'react';
+import {motion} from 'framer-motion';
+import {Image, Money} from '@shopify/hydrogen';
 import Hero from '~/components/Hero/Hero';
 import Button from '~/components/mini/Button';
 import BriefCards from '~/components/Hero/BriefCards';
 import GummyDesc from '~/components/Hero/GummyDesc';
 import GummyProductSection from '~/components/Hero/ProductSection';
 import TestimonialSlider from '~/components/Hero/TestimonialSlider';
-import type { FeaturedCollectionFragment, RecommendedProductsQuery } from 'storefrontapi.generated';
-import { ProductItem } from '~/components/ProductItem';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
+import type {
+  FeaturedCollectionFragment,
+  RecommendedProductsQuery,
+} from 'storefrontapi.generated';
+import {ProductItem} from '~/components/ProductItem';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Autoplay} from 'swiper/modules';
 import 'swiper/css';
+import React, { useRef, useEffect } from "react";
+import { Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa6';
+
+
+interface RecommendedProductsProps {
+  products: Promise<RecommendedProductsQuery | null>;
+}
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Zizz Gummy | Home' }];
+  return [{title: 'Zizz Gummy | Home'}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
   const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
-  return { ...deferredData, ...criticalData };
+  return {...deferredData, ...criticalData};
 }
 
-async function loadCriticalData({ context }: LoaderFunctionArgs) {
-  const [{ collections }] = await Promise.all([
+async function loadCriticalData({context}: LoaderFunctionArgs) {
+  const [{collections}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
   ]);
   return {
@@ -316,7 +50,7 @@ async function loadCriticalData({ context }: LoaderFunctionArgs) {
   };
 }
 
-function loadDeferredData({ context }: LoaderFunctionArgs) {
+function loadDeferredData({context}: LoaderFunctionArgs) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
@@ -331,6 +65,31 @@ function loadDeferredData({ context }: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
+  // Animation variants for the container
+  const containerVariants = {
+    hidden: {opacity: 0},
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
+  // Animation variants for the image
+  const imageVariants = {
+    hidden: {opacity: 0, scale: 0.95},
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen mx-auto">
       <Hero />
@@ -339,9 +98,20 @@ export default function Homepage() {
       <RecommendedProducts products={data.recommendedProducts} />
       <GummyDesc />
       <GummyProductSection />
-      <div className="w-full mt-10">
-        <Image src="/static/coolway.png" alt="Cool Way Image" />
-      </div>
+      <motion.div
+        className="w-full mt-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div variants={imageVariants}>
+          <Image
+            src="/static/coolway.png"
+            alt="Cool Way Image"
+            className="md:h-auto h-[175px]"
+          />
+        </motion.div>
+      </motion.div>
       <TestimonialSlider />
     </div>
   );
@@ -362,20 +132,105 @@ export default function Homepage() {
 //   );
 // }
 
-function RecommendedProducts({ products }: { products: Promise<RecommendedProductsQuery | null> }) {
+
+
+
+
+function RecommendedProducts({ products }: RecommendedProductsProps) {
+  // Ref for Swiper instance
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  // Ensure Swiper navigation updates after initialization
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.navigation?.update();
+    }
+  }, []);
+
+  // Animation variants for the container
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  // Animation variants for individual elements
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  // Animation variants for product items
+  const productVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  // Animation variants for navigation buttons
+  const buttonVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className="recommended-products px-2 py-8 max-w-[1440px] mx-auto">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 my-6">
-        <h3 className="text-[#1F1F1F] text-2xl sm:text-3xl lg:text-4xl font-bold">
+    <motion.div
+      className="recommended-products px-3 py-8 max-w-[1440px] mx-auto"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div
+        className="flex items-start md:items-center justify-between gap-4 my-6 px-2"
+        variants={itemVariants}
+      >
+        <motion.h3
+          className="text-[#1F1F1F] text-xl md:text-3xl lg:text-4xl font-bold"
+          variants={itemVariants}
+        >
           Explore Our Gummies
-        </h3>
-        <Button text="Learn More" bgColor="bg-[#1E1E1E]" icon={<BsArrowUpRightCircle />} />
-      </div>
+        </motion.h3>
+        <motion.div variants={itemVariants}>
+          <Button
+            text="View All"
+            bgColor="bg-[#1E1E1E]"
+            icon={<BsArrowUpRightCircle />}
+          />
+        </motion.div>
+      </motion.div>
 
       <Suspense fallback={<div className="text-center text-lg">Loading...</div>}>
         <Await resolve={products}>
           {(response) => {
-            console.log('Recommended Products Response:', JSON.stringify(response, null, 2));
+            console.log(
+              "Recommended Products Response:",
+              JSON.stringify(response, null, 2)
+            );
             if (!response || !response.products?.nodes?.length) {
               return (
                 <div className="text-center text-lg text-gray-600">
@@ -390,19 +245,58 @@ function RecommendedProducts({ products }: { products: Promise<RecommendedProduc
                     spaceBetween={16}
                     slidesPerView={1}
                     autoplay={{ delay: 2500, disableOnInteraction: false }}
-                    modules={[Autoplay]}
+                    navigation={{
+                      nextEl: ".custom-swiper-button-next",
+                      prevEl: ".custom-swiper-button-prev",
+                    }}
+                    modules={[Autoplay, Navigation]}
                     grabCursor={true}
+                    onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
                   >
                     {response.products.nodes.map((product) => (
                       <SwiperSlide key={product.id}>
-                        <ProductItem product={product} />
+                        <motion.div
+                          variants={productVariants}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <ProductItem product={product} />
+                        </motion.div>
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                  <motion.div
+                    className="flex gap-4 mt-1 justify-start"
+                    variants={itemVariants}
+                  >
+                    <motion.button
+                      className="custom-swiper-button-prev bg-black text-white p-3 rounded-full border-2 border-white flex items-center justify-center w-10 h-10 z-50 hover:bg-gray-800 transition-colors"
+                      variants={buttonVariants}
+                      onClick={() => swiperRef.current?.slidePrev()}
+                      aria-label="Previous product"
+                    >
+                      <FaArrowLeft size={20} />
+                    </motion.button>
+                    <motion.button
+                      className="custom-swiper-button-next bg-black text-white p-3 rounded-full border-2 border-white flex items-center justify-center w-10 h-10 z-50 hover:bg-gray-800 transition-colors"
+                      variants={buttonVariants}
+                      onClick={() => swiperRef.current?.slideNext()}
+                      aria-label="Next product"
+                    >
+                      <FaArrowRight size={20} />
+                    </motion.button>
+                  </motion.div>
                 </div>
                 <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {response.products.nodes.map((product) => (
-                    <ProductItem key={product.id} product={product} />
+                    <motion.div
+                      key={product.id}
+                      variants={productVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <ProductItem product={product} />
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -410,9 +304,10 @@ function RecommendedProducts({ products }: { products: Promise<RecommendedProduc
           }}
         </Await>
       </Suspense>
-    </div>
+    </motion.div>
   );
 }
+
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {

@@ -81,13 +81,13 @@ const Button: React.FC<ButtonProps> = ({
       initial="hidden"
       animate="visible"
       onClick={onClick}
-      className={`flex items-center gap-2 px-6 py-2 rounded border-2 font-medium poppins justify-center text-xs md:text-[20px]
+      className={`flex items-center gap-2 md:px-6 md:py-2 px-4 py-2 rounded border-2 font-medium poppins justify-center text-xs md:text-[20px]
         transition-all duration-300 ease-in-out transform
         ${bgColor} ${textColor} ${hoverBgColor} ${hoverTextColor} ${borderColor}
         hover:-translate-y-1 hover:shadow-lg`}
     >
       <span>{text}</span>
-      {icon && <span className="text-xl">{icon}</span>}
+      {icon && <span className="md:text-xl text-base">{icon}</span>}
     </motion.button>
   );
 };
