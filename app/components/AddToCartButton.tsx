@@ -1,5 +1,6 @@
 import {type FetcherWithComponents} from '@remix-run/react';
 import {CartForm, type OptimisticCartLineInput} from '@shopify/hydrogen';
+import { toast } from 'sonner';
 
 export function AddToCartButton({
   analytics,
@@ -25,8 +26,11 @@ export function AddToCartButton({
           />
           <button
             type="submit"
-            onClick={onClick}
-            className='w-full'
+           onClick={() => {
+                toast.success('Added to cart');
+                if (onClick) onClick();
+              }}
+            className='w-full cursor-pointer'
             disabled={disabled ?? fetcher.state !== 'idle'}
           >
             {children}
