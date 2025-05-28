@@ -1,25 +1,95 @@
 import React from 'react';
-import { Image } from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
 import Button from '../mini/Button';
-import { PiHandbagFill } from "react-icons/pi";
-import { BsArrowUpRightCircle } from "react-icons/bs";
+import {PiHandbagFill} from 'react-icons/pi';
+import {BsArrowUpRightCircle} from 'react-icons/bs';
+import { motion } from 'framer-motion';
 
 function Hero() {
-  return (
-    <div className="relative w-full">
-      <Image src="/static/HeroBanner.png" alt="Zizz Hero" className="w-full h-auto" />
+  // Animation variants for the overlay content
+  const overlayVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: "easeOut",
+        staggerChildren: 0.2 
+      }
+    }
+  };
 
-      {/* Overlayed content */}
-      <div className="absolute top-1/4 left-10 max-w-lg text-white space-y-4 hidden md:block">
-        <h3 className="text-[#2D2D2D] text-6xl font-extrabold inter">Wellness Just Got Tastier</h3>
-        <p className="text-[#2D2D2D] text-xl font-medium mt-6 poppins">
-          Say goodbye to boring pills. ZIZZ Gummies are your fun, flavorful fix for real health goals – better sleep, stronger hair, stronger bones, and more.
-        </p>
-        <div className="flex gap-4 mt-10">
-          <Button text="Shop Now" bgColor="bg-[#1E1E1E]"  textColor="text-white"borderColor='border-[#1E1E1E]' icon={<PiHandbagFill />} />
-          <Button text="Learn More" bgColor="bg-transparent" borderColor='border-[#1E1E1E]' textColor="text-[#2D2D2D]" icon={<BsArrowUpRightCircle />} />
-        </div>
-      </div>
+  // Animation variants for individual elements
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
+  return (
+    <div className="relative w-full overflow-hidden">
+      <>
+        <Image
+          src="/static/HeroBanner.png"
+          alt="Zizz Hero"
+          className="hidden md:block w-full h-auto"
+        />
+        <Image
+          src="/static/mobileBanner.png"
+          alt="Zizz Hero Mobile"
+          className="block md:hidden w-full h-[275px]"
+        />
+      </>
+
+      {/* Overlayed content with Framer Motionn */}
+      <motion.div 
+        className="absolute md:top-1/4 top-2 md:left-10 px-5 md:px-0 max-w-lg py-5 md:py-0 text-white md:space-y-4 inset-0 flex flex-col gap-2"
+        variants={overlayVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h3 
+          className="text-[#2D2D2D] md:text-6xl text-[28px] font-extrabold inter w-[14rem] md:w-full"
+          variants={itemVariants}
+        >
+          Wellness Just Got Tastier
+        </motion.h3>
+        <motion.p 
+          className="text-[#2D2D2D] md:text-xl text-[9px] w-[175px] md:w-full font-medium md:mt-6 poppins"
+          variants={itemVariants}
+        >
+          Say goodbye to boring pills. ZIZZ Gummies are your fun, flavorful fix
+          for real health goals – better sleep, stronger hair, stronger bones,
+          and more.
+        </motion.p>
+        <motion.div 
+          className="flex gap-4 md:mt-10"
+          variants={itemVariants}
+        >
+          <div>
+            <Button
+              text="Shop Now"
+              bgColor="bg-[#1E1E1E]"
+              textColor="text-white"
+              borderColor="border-[#1E1E1E]"
+              icon={<PiHandbagFill />}
+            />
+          </div>
+          <div className='md:block hidden'>
+            <Button
+              text="Learn More"
+              bgColor="bg-transparent"
+              borderColor="border-[#1E1E1E]"
+              textColor="text-[#2D2D2D]"
+              icon={<BsArrowUpRightCircle />}
+            />
+          </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
