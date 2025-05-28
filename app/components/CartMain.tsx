@@ -4,6 +4,8 @@ import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
 import {CartLineItem} from '~/components/CartLineItem';
 import {CartSummary} from './CartSummary';
+import Button from './mini/Button';
+import { FiShoppingCart } from 'react-icons/fi';
 
 export type CartLayout = 'page' | 'aside';
 
@@ -52,17 +54,30 @@ function CartEmpty({
   layout?: CartMainProps['layout'];
 }) {
   const {close} = useAside();
-  return (
-    <div hidden={hidden}>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
+
+    return (
+    <div
+      hidden={hidden}
+      className="flex flex-col items-center justify-center text-center p-8 bg-white rounded-lg shadow-md max-w-xl mx-auto mt-10"
+    >
+      <FiShoppingCart className="text-6xl text-black mb-6" />
+      <p className="text-lg text-gray-700 mb-4">
+        Looks like you haven’t added anything yet. Let’s get you started!
       </p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
-        Continue shopping →
+      <Link
+        to="/collections"
+        onClick={close}
+        prefetch="viewport"
+        className="inline-block bg-black hover:-translate-y-1 text-white text-sm font-medium px-6 py-3 rounded-lg transition duration-200"
+      >
+        Continue Shopping →
       </Link>
     </div>
   );
+
 }
+
+
+
+
+

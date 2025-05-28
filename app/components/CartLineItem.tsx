@@ -252,8 +252,13 @@ function CartLineQuantity({line}: {line: CartLine}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="flex items-center space-x-2 mt-3">
+    <div className="flex space-x-2 mt-3 flex-col items-start">
+      <div>
       <span className="text-sm font-medium text-gray-700">Quantity: {quantity}</span>
+        
+      </div>
+
+      <div className='flex gap-2'>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
@@ -276,7 +281,12 @@ function CartLineQuantity({line}: {line: CartLine}) {
           <span className="text-lg font-bold text-white">+</span>
         </button>
       </CartLineUpdateButton>
+
+      </div>
+      <div>
+
       <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
+      </div>
     </div>
   );
 }

@@ -2,6 +2,8 @@ import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
 import { FaExclamationTriangle } from "react-icons/fa";
 import Button from './components/mini/Button';
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import { Toaster } from 'sonner';
+
 import {
   Outlet,
   useRouteError,
@@ -166,6 +168,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
             shop={data.shop}
             consent={data.consent}
           >
+            <Toaster/>
             <PageLayout {...data}>{children}</PageLayout>
           </Analytics.Provider>
         ) : (
