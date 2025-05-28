@@ -45,7 +45,7 @@ function Hero() {
         />
       </>
 
-      {/* Overlayed content with Framer Motion */}
+      {/* Overlayed content with Framer Motionn */}
       <motion.div 
         className="absolute md:top-1/4 top-2 md:left-10 px-5 md:px-0 max-w-lg py-5 md:py-0 text-white md:space-y-4 inset-0 flex flex-col gap-2"
         variants={overlayVariants}
