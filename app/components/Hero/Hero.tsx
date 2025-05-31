@@ -41,7 +41,7 @@ function Hero() {
         <Image
           src="/static/mobileBanner.png"
           alt="Zizz Hero Mobile"
-          className="block md:hidden w-full h-[275px]"
+          className="block md:hidden w-full h-[240px]"
         />
       </>
 
