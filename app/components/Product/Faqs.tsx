@@ -37,7 +37,7 @@ export default function Example() {
 
   return (
     <div>
-        <h1 className="text-black inter font-bold md:text-4xl text-2xl text-center mt-10">FAQs About Gummies</h1> 
+        <h1 className="text-black inter font-bold md:text-4xl text-xl text-center mt-10">FAQs About Gummies</h1> 
         <FAQ faqs={faqData}/>
     </div>
   )

@@ -559,3 +559,19 @@ button.reset:hover:not(:has(> *)) {
 
 
 
+/* LOADER STYLE */
+
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 3px solid transparent;
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

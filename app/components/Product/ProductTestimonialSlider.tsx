@@ -31,13 +31,12 @@ const testimonials = [
 
 const TestimonialSlider: React.FC = () => {
   return (
-    <section className="py-12 px-4 bg-[#FAFAFA] text-center max-w-screen-xl mx-auto">
-      <h3 className="text-2xl md:text-4xl font-bold mb-5 text-[#1F1F1F]">Backed by Science</h3>
-      <h4 className="text-[#2D2D2D] text-2xl font-normal mb-10">Formulated by sleep researchers and nutritionists</h4>
+    <section className="md:py-12 py-2 px-4 bg-[#FAFAFA] text-center max-w-screen-xl mx-auto">
+      <h3 className="text-xl md:text-4xl font-bold mb-5 text-[#1F1F1F]">Backed by Science</h3>
+      <h4 className="text-[#2D2D2D] md:text-2xl text-sm text-center font-normal mb-10">Formulated by sleep researchers and nutritionists</h4>
 
       <Swiper
         spaceBetween={30}
-        pagination={{ clickable: true }}
         modules={[Pagination]}
         breakpoints={{
           640: { slidesPerView: 1 },

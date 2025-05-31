@@ -5,6 +5,7 @@ import { BsInstagram } from "react-icons/bs";
 import { FaFacebookF } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
+import { Image } from '@shopify/hydrogen';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -25,8 +26,10 @@ export function Footer({
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {/* Branding */}
               <div>
-                <div className="text-3xl font-bold mb-2">zizz</div>
-                <p className="text-sm text-[#FAFAFA]">
+                <div className='block w-fit'>
+                  <Image src='/static/logo_white.png' className='w-[45px] h-[22.5px] md:w-[101px] md:h-[50.5px]'/> 
+                </div>
+                <p className="text-sm text-[#FAFAFA] opacity-80 mt-3">
                   Delicious and nutritious vitamin gummies for your daily wellness routine.
                 </p>
                 <div className="mt-4">
