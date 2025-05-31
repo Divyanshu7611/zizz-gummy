@@ -26,7 +26,7 @@ export default function FAQ({ faqs }: FAQProps) {
               onClick={() => toggle(index)}
               className="group flex w-full items-center justify-between px-6 py-4 text-left max-w-screen-xl mx-auto"
             >
-              <span className="text-base md:text-xl font-medium md:font-semibold">{faq.question}</span>
+              <span className="text-sm md:text-xl font-medium md:font-semibold">{faq.question}</span>
               <MdOutlineKeyboardArrowDown
                 className={`size-6 md:size-8 text-black transition-transform duration-300 ${
                   openIndex === index ? 'rotate-180' : ''

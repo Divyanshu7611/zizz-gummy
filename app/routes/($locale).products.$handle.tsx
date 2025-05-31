@@ -494,39 +494,47 @@ export default function Product() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-10 justify-between max-w-screen-xl mx-auto py-5">
+      <div className="flex flex-col md:flex-row md:gap-10 gap-5 justify-between max-w-screen-xl mx-auto py-5 px-5">
+        <div className='flex flex-col'>
+
+        <h1 className="inter font-bold text-xl md:text-4xl text-black md:hidden block">{title}</h1>
+          <div
+            className="inter font-normal text-sm md:text-2xl md:hidden block"
+            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+          />
+        </div>
         <div className="w-full md:w-1/2">
           <ProductCarousel images={medias} />
         </div>
 
-        <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 px-4 md:px-0 py-2">
-          <h1 className="inter font-bold text-3xl md:text-4xl text-black">{title}</h1>
+        <div className="w-full md:w-1/2 flex flex-col justify-between gap-6 md:px-0 py-2">
+          <h1 className="inter font-bold text-3xl md:text-4xl text-black md:block hidden">{title}</h1>
           <div
-            className="inter font-normal text-lg md:text-2xl"
+            className="inter font-normal text-lg md:text-2xl hidden md:block"
             dangerouslySetInnerHTML={{ __html: descriptionHtml }}
           />
-          <h2 className="font-bold text-lg md:text-xl">For Both Men and Women</h2>
-          <div className="mt-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <h2 className="font-bold text-sm md:text-xl">For Both Men and Women</h2>
+          <div className="md:mt-5 mt-0 flex justify-between items-start sm:items-center gap-3">
             <ProductPrice
               price={selectedVariant?.price}
               compareAtPrice={selectedVariant?.compareAtPrice}
             />
             <div className="flex items-center gap-1 inter text-sm md:text-base">
               <FaStar className="text-[#FFCC00] text-lg" />
-              <span className="font-semibold">4.5/5 (50+ Reviews)</span>
+              <span className="md:font-semibold font-medium text-xs md:text-lg">4.5/5 (50+ Reviews)</span>
             </div>
           </div>
-          <div className="flex flex-col mt-6">
-            <h3 className="text-lg md:text-xl font-bold inter">Pick your pack:</h3>
+          <div className="flex flex-col md:mt-6 mt-1">
+            <h3 className="text-sm md:text-xl md:font-bold font-semibold inter">Pick your pack:</h3>
             <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
           </div>
-          <div className="flex flex-col sm:flex-row mt-6 gap-3 items-center">
-            <div className="flex items-center justify-between bg-[#1F1F1F] text-white px-4 py-2 text-lg rounded-sm w-full sm:w-1/3">
-              <button onClick={decrementCounter} aria-label="Decrease quantity">
+          <div className="flex mt-6 gap-3 items-center">
+            <div className="flex items-center justify-between bg-[#1F1F1F] text-white md:px-4 py-1.5 px-2 text-xl font-bold rounded-sm w-2/3 md:w-1/3">
+              <button onClick={decrementCounter} aria-label="Decrease quantity" className='cursor-pointer'>
                 <IoIosArrowBack />
               </button>
               <span>{counter}</span>
-              <button onClick={incrementCounter} aria-label="Increase quantity">
+              <button onClick={incrementCounter} aria-label="Increase quantity" className='cursor-pointer'>
                 <IoIosArrowForward />
               </button>
             </div>
@@ -552,11 +560,11 @@ export default function Product() {
                 />
                 <button
                   type="submit"
-                  className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full flex items-center justify-center font-bold inter disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer hover:bg-[#5B7F5F] transition-colors duration-150"
                   disabled={fetcher.state !== 'idle'}
                   onClick={()=>toast.success('Added to Cart')}
                 >
-                  {fetcher.state === 'submitting' ? 'Adding...' : 'ADD TO CART'}
+                  {fetcher.state === 'submitting' ? <span className='loader w-full h-full'></span> : 'ADD TO CART'}
                 </button>
               </fetcher.Form>
             ) : (
@@ -574,10 +582,10 @@ export default function Product() {
             {selectedVariant?.availableForSale ? (
               <button
                 onClick={handleBuyNow}
-                className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full font-bold inter hover:bg-[#5B7F5F]"
+                className="bg-[#6D9773] disabled:bg-gray-400 text-white px-4 py-2 rounded-sm flex justify-center items-center w-full font-bold inter hover:bg-[#5B7F5F] transition-colors duration-150 cursor-pointer"
                 disabled={fetcher.state !== 'idle'}
               >
-                {fetcher.state === 'submitting' ? 'Processing...' : 'BUY NOW'}
+                {fetcher.state === 'submitting' ? <span className='loader'></span> : 'BUY NOW'}
               </button>
             ) : (
               <button
