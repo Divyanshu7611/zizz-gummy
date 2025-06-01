@@ -246,7 +246,7 @@ export function ProductItem({
     : [];
 
   return (
-    <div className="product-item rounded shadow-sm space-y-2 bg-[#FAFAFA] p-4 relative">
+    <div className="rounded shadow-sm bg-[#FAFAFA] relative poppins">
       <Link
         key={product.id}
         prefetch="intent"
@@ -280,24 +280,24 @@ export function ProductItem({
         </div>
 
         <div className="p-2">
-          <h4 className="mt-2 text-[#1F1F1F] font-bold text-xl md:text-3xl">
+          <h4 className="mt-2 text-[#1F1F1F] font-bold text-sm md:text-3xl inter">
             {product.title}
           </h4>
 
           {shortDescription && (
-            <p className="text-[#1E1E1E] text-sm md:text-base mt-1 line-clamp-2">
+            <p className="text-[#1E1E1E] text-[10px] md:text-base mt-1 line-clamp-2 poppins">
               {shortDescription}
             </p>
           )}
 
           <div className="flex items-center gap-2 mt-2">
-            <small className="text-[#1E1E1E] text-2xl md:text-4xl font-semibold">
+            <small className="text-[#1E1E1E] text-xl md:text-4xl font-semibold">
               <Money
                 data={firstVariant?.price || product.priceRange.minVariantPrice}
               />
             </small>
             {isOnSale && firstVariant?.compareAtPrice && (
-              <small className="text-[#1E1E1E] text-lg md:text-xl line-through opacity-60">
+              <small className="text-[#1E1E1E] text-lg md:text-xl line-through opacity-60 hidden md:block">
                 <Money data={firstVariant.compareAtPrice} />
               </small>
             )}

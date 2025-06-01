@@ -243,7 +243,7 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
                 <div className="block md:hidden">
                   <Swiper
                     spaceBetween={16}
-                    slidesPerView={1}
+                    slidesPerView={2}
                     autoplay={{ delay: 2500, disableOnInteraction: false }}
                     navigation={{
                       nextEl: ".custom-swiper-button-next",
