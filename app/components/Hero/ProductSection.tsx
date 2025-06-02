@@ -1,8 +1,15 @@
 import React from 'react';
 import { Image } from '@shopify/hydrogen';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
-function ProductSection() {
+const ProductSection: React.FC = () => {
+  // Hook to detect when the component is in view
+  const { ref, inView } = useInView({
+    triggerOnce: true, // Animation triggers only once
+    threshold: 0.2, // Trigger when 20% of the component is visible
+  });
+
   // Animation variants for the container
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,10 +50,11 @@ function ProductSection() {
 
   return (
     <motion.div
-      className='mt-10 max-w-[1440px] mx-auto px-3'
+      ref={ref}
+      className="mt-10 max-w-[1440px] mx-auto px-3"
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      animate={inView ? 'visible' : 'hidden'}
     >
       <motion.h3
         className="text-xl font-bold mb-2 text-center md:text-4xl text-[#000000] inter"
@@ -66,22 +74,36 @@ function ProductSection() {
         className="flex justify-center mb-8 mt-10 border border-[#1F1F1F40] w-fit mx-auto rounded-lg overflow-hidden poppins"
         variants={itemVariants}
       >
-        <button className="bg-green-500 text-white px-4 md:text-xl text-xs py-2 rounded-l-lg hover:bg-green-600 transition">
+        <button
+          className="bg-green-500 text-white px-4 md:text-xl text-xs py-2 rounded-l-lg hover:bg-green-600 transition"
+          aria-label="View our product"
+        >
           Our Product
         </button>
-        <button className="border px-4 py-2 md:text-xl text-xs hover:bg-gray-100 transition border-none">
+        <button
+          className="border px-4 py-2 md:text-xl text-xs hover:bg-gray-100 transition border-none"
+          aria-label="View other products"
+        >
           Other Products
         </button>
       </motion.div>
 
       <motion.div variants={imageVariants}>
-        <Image src='/static/landingPageDescGummyMobile.png' alt='Product Tutorial' className='block md:hidden'/>
+        <Image
+          src="/static/landingPageDescGummyMobile.png"
+          alt="ZIZZ gummy product for mobile view"
+          className="block md:hidden"
+        />
       </motion.div>
       <motion.div variants={imageVariants}>
-        <Image src='/static/ProductDesc.png' alt='Product Tutorial' className='md:block hidden'/>
+        <Image
+          src="/static/ProductDesc.png"
+          alt="ZIZZ gummy product for desktop view"
+          className="md:block hidden"
+        />
       </motion.div>
     </motion.div>
   );
-}
+};
 
 export default ProductSection;

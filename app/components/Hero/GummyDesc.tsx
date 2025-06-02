@@ -1,44 +1,15 @@
-// import React from 'react';
-// import { Image } from '@shopify/hydrogen';
-
-// function GummyDesc() {
-//   return (
-//     <div className="w-full inter flex flex-col-reverse md:flex-row items-stretch justify-between px-4 md:px-16 lg:px-0 py-8 gap-8 max-w-[1440px] mx-auto">
-//       {/* Text Section */}
-//       <div className="flex flex-col gap-4 w-full md:max-w-xl text-start md:text-left justify-center">
-//         <h1 className="text-[#000000] text-xl md:text-4xl font-bold inter">
-//           Your Daily Dose of Health – Now in a Gummy!
-//         </h1>
-
-//         <h4 className="text-[#2D2D2D] font-normal text-sm md:text-2xl inter">
-//           Let’s face it — pills are boring. Syrups are messy. Powders are a hassle. That’s why we created ZIZZ — a delicious gummy that takes care of your health without disrupting your routine. Pop a gummy, live your life.
-//         </h4>
-
-//         <ol className="text-[#2D2D2D] text-sm md:text-2xl text-start list-disc list-outside pl-6 space-y-2 inter">
-//           <li>Tastes amazing</li>
-//           <li>Easy to carry, easy to consume</li>
-//           <li>Scientifically formulated</li>
-//           <li>No added sugar, no fuss</li>
-//         </ol>
-//       </div>
-
-//       {/* Image Section */}
-//       <div className="w-full md:max-w-xl flex justify-center items-center">
-//         <Image src="/static/gummyDesc.png" alt="Gummy Overview" className="w-full h-full object-contain" />
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default GummyDesc;
-
-
-
 import React from 'react';
 import { Image } from '@shopify/hydrogen';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
-function GummyDesc() {
+const GummyDesc: React.FC = () => {
+  // Hook to detect when the component is in view
+  const { ref, inView } = useInView({
+    triggerOnce: true, // Animation triggers only once
+    threshold: 0.2, // Trigger when 20% of the component is visible
+  });
+
   // Animation variants for the container
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -92,10 +63,11 @@ function GummyDesc() {
 
   return (
     <motion.div
+      ref={ref}
       className="w-full inter flex flex-col-reverse md:flex-row items-stretch justify-between px-4 md:px-16 lg:px-0 py-8 gap-8 max-w-[1440px] mx-auto"
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      animate={inView ? 'visible' : 'hidden'}
     >
       {/* Text Section */}
       <motion.div
@@ -132,10 +104,14 @@ function GummyDesc() {
         className="w-full md:max-w-xl flex justify-center items-center"
         variants={imageVariants}
       >
-        <Image src="/static/gummyDesc.png" alt="Gummy Overview" className="w-full h-full object-contain" />
+        <Image
+          src="/static/gummyDesc.png"
+          alt="ZIZZ gummy product for daily health and wellness"
+          className="w-full h-full object-contain"
+        />
       </motion.div>
     </motion.div>
   );
-}
+};
 
 export default GummyDesc;

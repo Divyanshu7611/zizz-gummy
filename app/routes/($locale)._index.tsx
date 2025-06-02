@@ -25,6 +25,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaArrowRight } from 'react-icons/fa6';
+import { useInView } from 'react-intersection-observer';
 
 
 interface RecommendedProductsProps {
@@ -135,10 +136,15 @@ export default function Homepage() {
 
 
 
-
-function RecommendedProducts({ products }: RecommendedProductsProps) {
+const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) => {
   // Ref for Swiper instance
   const swiperRef = useRef<SwiperType | null>(null);
+
+  // Hook to detect when the component is in view
+  const { ref, inView } = useInView({
+    triggerOnce: true, // Animation triggers only once
+    threshold: 0.2, // Trigger when 20% of the component is visible
+  });
 
   // Ensure Swiper navigation updates after initialization
   useEffect(() => {
@@ -200,10 +206,11 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
 
   return (
     <motion.div
+      ref={ref}
       className="recommended-products px-3 py-8 max-w-[1440px] mx-auto"
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      animate={inView ? "visible" : "hidden"}
     >
       <motion.div
         className="flex items-start md:items-center justify-between gap-4 my-6 px-2"
@@ -223,7 +230,6 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
           />
         </motion.div>
       </motion.div>
-
       <Suspense fallback={<div className="text-center text-lg">Loading...</div>}>
         <Await resolve={products}>
           {(response) => {
@@ -258,7 +264,7 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
                         <motion.div
                           variants={productVariants}
                           initial="hidden"
-                          animate="visible"
+                          animate={inView ? "visible" : "hidden"}
                         >
                           <ProductItem product={product} />
                         </motion.div>
@@ -293,7 +299,7 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
                       key={product.id}
                       variants={productVariants}
                       initial="hidden"
-                      animate="visible"
+                      animate={inView ? "visible" : "hidden"}
                     >
                       <ProductItem product={product} />
                     </motion.div>
@@ -306,8 +312,7 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
       </Suspense>
     </motion.div>
   );
-}
-
+};
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
