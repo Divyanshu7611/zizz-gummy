@@ -274,26 +274,30 @@ function CartAside({ cart }: { cart: PageLayoutProps['cart'] }) {
   );
 }
 
+
+
+
 function SearchAside() {
   const queriesDatalistId = useId();
   return (
     <Aside type="search" heading="SEARCH">
       <div className="predictive-search">
         <br />
-        <SearchFormPredictive>
+        <SearchFormPredictive className='flex px-2 gap-3'>
           {({ fetchResults, goToSearch, inputRef }) => (
             <>
               <input
                 name="q"
                 onChange={fetchResults}
                 onFocus={fetchResults}
+               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Search"
                 ref={inputRef}
                 type="search"
                 list={queriesDatalistId}
               />
                
-              <button onClick={goToSearch}>Search</button>
+              <button onClick={goToSearch} className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition">Search</button>
             </>
           )}
         </SearchFormPredictive>

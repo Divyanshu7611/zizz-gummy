@@ -27,7 +27,7 @@ export async function loader(args: LoaderFunctionArgs) {
 async function loadCriticalData({context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 6,
   });
 
   const [{products}] = await Promise.all([
@@ -51,6 +51,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
   console.log('the product items are',products)
+
 
   return (
     <div className="inter">

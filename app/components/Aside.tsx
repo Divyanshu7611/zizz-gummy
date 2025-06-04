@@ -61,8 +61,8 @@ export function Aside({
       <button className="close-outside" onClick={close} />
       <aside>
         <header>
-          <h3>{heading}</h3>
-          <button className="close reset" onClick={close} aria-label="Close">
+          <h3 className='font-semibold'>{heading}</h3>
+          <button className="text-3xl cursor-pointer hover:scale-105 transition-all duration-200" onClick={close} aria-label="Close">
             &times;
           </button>
         </header>
