@@ -259,17 +259,22 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                     grabCursor={true}
                     onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
                   >
-                    {response.products.nodes.map((product) => (
-                      <SwiperSlide key={product.id}>
+                    {response.products.nodes.map((product,index) => {
+                      console.log(`RecommendedProducts - Product ID: ${product.id}, Index: ${index}`);
+
+                      return(<SwiperSlide key={product.id}>
                         <motion.div
                           variants={productVariants}
                           initial="hidden"
                           animate={inView ? "visible" : "hidden"}
                         >
-                          <ProductItem product={product} />
+                          <ProductItem product={product} index={index}/>
                         </motion.div>
                       </SwiperSlide>
-                    ))}
+                    )
+                    }
+                  )
+                  }
                   </Swiper>
                   <motion.div
                     className="flex gap-4 mt-1 justify-start"
@@ -294,14 +299,14 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                   </motion.div>
                 </div>
                 <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {response.products.nodes.map((product) => (
+                  {response.products.nodes.map((product,index) => (
                     <motion.div
                       key={product.id}
                       variants={productVariants}
                       initial="hidden"
                       animate={inView ? "visible" : "hidden"}
                     >
-                      <ProductItem product={product} />
+                      <ProductItem product={product} index={index}/>
                     </motion.div>
                   ))}
                 </div>
@@ -345,6 +350,8 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
     id
     title
+    description
+    descriptionHtml
     handle
     productType
     tags
