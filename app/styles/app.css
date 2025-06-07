@@ -431,8 +431,8 @@ button.reset:hover:not(:has(> *)) {
 
 .products-grid {
   display: grid;
-  grid-gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
+  grid-gap: 3rem;
+  grid-template-columns: repeat(4, minmax(var(--grid-item-width), 1fr));
   margin-bottom: 2rem;
 }
 

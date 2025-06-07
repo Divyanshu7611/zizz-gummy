@@ -227,6 +227,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
             text="View All"
             bgColor="bg-[#1E1E1E]"
             icon={<BsArrowUpRightCircle />}
+            href='/collections/all'
           />
         </motion.div>
       </motion.div>
@@ -260,7 +261,6 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                     onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
                   >
                     {response.products.nodes.map((product,index) => {
-                      console.log(`RecommendedProducts - Product ID: ${product.id}, Index: ${index}`);
 
                       return(<SwiperSlide key={product.id}>
                         <motion.div

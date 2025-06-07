@@ -55,20 +55,21 @@ export default function Collection() {
 
   return (
     <div className="inter">
-      <div className='bg-[#B0EACD] w-full py-32 flex justify-center items-center flex-col'>
-        <h1 className='text-[40px] font-bold text-center'>Your Daily Rituals, Reinvented</h1>
-        <p className='text-center text-2xl max-w-2xl mt-3'>Scientifically formulated gummies to support sleep, recovery, and radiance—naturally</p>
+      <div className='bg-[#B0EACD] w-full md:py-32 py-16 flex justify-center items-center flex-col px-3'>
+        <h1 className='md:text-[40px] text-xl font-bold text-center'>Your Daily Rituals, Reinvented</h1>
+        <p className='text-center md:text-2xl text-sm max-w-2xl mt-3'>Scientifically formulated gummies to support sleep, recovery, and radiance—naturally</p>
       </div>
 
-      <h1 className='text-center text-4xl text-[#1F1F1F] font-bold py-10 inter'>Explore Our Gummies</h1>
+      <h1 className='text-center md:text-4xl text-xl text-[#1F1F1F] font-bold md:py-10 py-6 inter'>Explore Our Gummies</h1>
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="products-grid max-w-screen-xl mx-auto"
+        resourcesClassName="max-w-screen-xl mx-auto grid md:grid-cols-4 grid-cols-2 gap-3 px-3"
       >
         {({node: product, index}) => (
           <ProductItem
             key={product.id}
             product={product}
+            index={index}
             loading={index < 8 ? 'eager' : undefined}
           />
         )}
@@ -92,6 +93,7 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    description
     productType
     tags
     featuredImage {

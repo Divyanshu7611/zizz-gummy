@@ -217,8 +217,7 @@ export function ProductItem({
   const buttonBgColor = buttonColors[index % buttonColors.length];
   const buttonHoverColor = hoverColors[index % hoverColors.length];
 
-  console.log(`ProductItem - ID: ${product.id}, Index: ${index}, Color: ${buttonColors[index % buttonColors.length]}`);
-
+  
   // Simulated rating (hardcoded to 4.5 for now; can be dynamic via metafield)
   const rating = 4.5;
   const fullStars = Math.floor(rating);
@@ -231,9 +230,9 @@ export function ProductItem({
         key={product.id}
         prefetch="intent"
         to={variantUrl}
-        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer flex-grow"
+        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer flex-grow max-h-[500px]"
       >
-        <div className="relative overflow-hidden h-1/2 rounded-t-md">
+        <div className="relative overflow-hidden rounded-t-md">
           {image && (
             <Image
               alt={image.altText || product.title}
@@ -259,7 +258,7 @@ export function ProductItem({
           </h4>
 
           {product.description && (
-            <p className="text-[#1E1E1E] text-[10px] md:text-sm mt-1 line-clamp-2 poppins opacity-75">
+            <p className="text-[#1E1E1E] text-[10px] md:text-sm mt-1 line-clamp-3 h-8 md:h-10 poppins opacity-75">
               {product.description}
             </p>
           )}

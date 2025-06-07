@@ -3,8 +3,8 @@ import { Image } from '@shopify/hydrogen'
 
 function VisionAndMission() {
   return (
-    <div className='bg-white py-10 px-5 flex flex-col max-w-screen-xl mx-auto gap-10 inter'>
-      <div className='flex md:flex-row flex-col justify-between gap-5'>
+    <div className='bg-white md:py-10 px-5 flex flex-col max-w-screen-xl mx-auto gap-10 inter'>
+      <div className='flex md:flex-row flex-col-reverse justify-between gap-5'>
         {/* Image Section */}
         <div>
           <Image src='/static/vision.png' alt='vision of zizz' className='w-[570px] md:h-[400px] h-[250px]'/>
@@ -21,7 +21,7 @@ function VisionAndMission() {
            
       </div>
 
-      <div className='flex md:flex-row flex-col-reverse justify-between gap-5'>
+      <div className='flex md:flex-row flex-col justify-between gap-5'>
 
 
         {/* COntent Section */}
