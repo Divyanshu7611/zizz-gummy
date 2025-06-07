@@ -230,7 +230,7 @@ export function ProductItem({
         key={product.id}
         prefetch="intent"
         to={variantUrl}
-        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer flex-grow max-h-[500px]"
+        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer flex-grow"
       >
         <div className="relative overflow-hidden rounded-t-md">
           {image && (
