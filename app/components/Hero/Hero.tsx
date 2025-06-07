@@ -137,7 +137,7 @@ function Hero() {
         <Image
           src="/static/HeroBanner.png"
           alt="Zizz Hero"
-          className="hidden md:block w-full h-auto object-cover"
+          className="hidden md:block w-full lg:h-auto lg:object-cover md:h-[500px]"
         />
         <Image
           src="/static/mobileBanner.png"
@@ -148,13 +148,13 @@ function Hero() {
 
       {/* Overlayed content with Framer Motion */}
       <motion.div 
-        className="absolute top-4 sm:top-6 md:top-1/4 left-0 sm:left-6 md:left-10 px-4 sm:px-5 md:px-0 max-w-[260px] sm:max-w-[340px] md:max-w-lg py-4 sm:py-5 md:py-0 text-white sm:space-y-3 md:space-y-4 inset-0 flex flex-col gap-2 sm:gap-3"
+        className="absolute top-5 sm:top-6 md:top-1/4 left-0 sm:left-2 md:left-8 lg:left-10 px-4 sm:px-5 md:px-0 max-w-[260px] sm:max-w-[340px] md:max-w-lg py-4 sm:py-5 md:py-0 text-white sm:space-y-0 md:space-y-0 lg:space-y-4 inset-0 flex flex-col gap-0 sm:gap-0 lg:gap-3"
         variants={overlayVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.h3 
-          className="text-[#2D2D2D] text-[22px] sm:text-3xl md:text-6xl font-extrabold inter w-[11rem] sm:w-[16rem] md:w-full"
+          className="text-[#2D2D2D] text-[22px] sm:text-3xl md:text-5xl lg:text-6xl font-extrabold inter w-[11rem] sm:w-[16rem] md:w-[26rem] lg:w-full"
           variants={itemVariants}
         >
           Wellness Just Got Tastier
