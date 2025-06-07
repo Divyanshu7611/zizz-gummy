@@ -64,7 +64,7 @@ const GummyDesc: React.FC = () => {
   return (
     <motion.div
       ref={ref}
-      className="w-full inter flex flex-col-reverse lg:flex-row items-stretch justify-between px-4 lg:px-0 md:py-8 py-0 gap-8 max-w-[1440px] mx-auto"
+      className="w-full inter flex flex-col-reverse overflow-x-hidden lg:flex-row items-stretch justify-between px-4 lg:px-0 md:py-8 py-0 gap-8 max-w-[1440px] mx-auto"
       variants={containerVariants}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}

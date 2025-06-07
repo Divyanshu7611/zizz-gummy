@@ -137,7 +137,7 @@ const Button: React.FC<ButtonProps> = ({
     },
   };
 
-  const classes = `flex items-center gap-2 md:px-6 md:py-2 px-4 py-2 rounded border-2 font-medium poppins justify-center text-xs md:text-[20px]
+  const classes = `flex items-center cursor-pointer gap-2 md:px-6 md:py-2 px-4 py-2 rounded border-2 font-medium poppins justify-center text-xs md:text-[20px]
     transition-all duration-300 ease-in-out transform
     ${bgColor} ${textColor} ${hoverBgColor} ${hoverTextColor} ${borderColor}
     hover:-translate-y-1 hover:shadow-lg`;
