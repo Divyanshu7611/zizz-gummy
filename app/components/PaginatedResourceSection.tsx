@@ -88,7 +88,6 @@ export function PaginatedResourceSection<NodesType>({
     : connection.edges.map(edge => edge.node);
 
   // Log the connection to debug
-  console.log('Connection:', connection);
 
   return (
     <Pagination connection={connection}>
@@ -106,7 +105,6 @@ export function PaginatedResourceSection<NodesType>({
         );
 
         // Log state to debug
-        console.log('Pagination state:', state);
 
         // Fallback for pageInfo
         const pageInfo = state.pageInfo || {
@@ -128,7 +126,7 @@ export function PaginatedResourceSection<NodesType>({
         // Estimate current page (simplified; adjust based on your routing logic)
         const currentPage =
           startCursor && nodes.length > 0
-            ? Math.floor(nodes.findIndex((node) => node.id === startCursor) / pageSize) + 1
+            ? Math.floor(nodes.findIndex((node:any) => node.id === startCursor) / pageSize) + 1
             : 1;
 
         // Generate page numbers

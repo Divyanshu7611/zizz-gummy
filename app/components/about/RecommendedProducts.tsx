@@ -21,8 +21,8 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
   }
 
   return (
-    <div className="recommended-products px-2 py-8 max-w-[1440px] mx-auto">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 my-6">
+    <div className="recommended-products py-8 max-w-[1440px] mx-auto px-3">
+      <div className="flex flex-row items-center justify-between my-6">
         <h3 className="text-[#1F1F1F] text-2xl sm:text-3xl lg:text-4xl font-bold">
           Explore Our Gummies
         </h3>
@@ -33,7 +33,7 @@ function RecommendedProducts({ products }: RecommendedProductsProps) {
         <div className="block md:hidden">
           <Swiper
             spaceBetween={16}
-            slidesPerView={1}
+            slidesPerView={2}
             autoplay={{ delay: 2500, disableOnInteraction: false }}
             modules={[Autoplay]}
             grabCursor={true}
