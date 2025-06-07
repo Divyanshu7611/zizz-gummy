@@ -64,14 +64,14 @@ const GummyDesc: React.FC = () => {
   return (
     <motion.div
       ref={ref}
-      className="w-full inter flex flex-col-reverse md:flex-row items-stretch justify-between px-4 md:px-16 lg:px-0 py-8 gap-8 max-w-[1440px] mx-auto"
+      className="w-full inter flex flex-col-reverse lg:flex-row items-stretch justify-between px-4 lg:px-0 md:py-8 py-0 gap-8 max-w-[1440px] mx-auto"
       variants={containerVariants}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
       {/* Text Section */}
       <motion.div
-        className="flex flex-col gap-4 w-full md:max-w-xl text-start md:text-left justify-center"
+        className="flex flex-col gap-0 md:gap-4 w-full md:max-w-xl text-start md:text-left justify-center"
         variants={textVariants}
       >
         <motion.h1
@@ -106,8 +106,9 @@ const GummyDesc: React.FC = () => {
       >
         <Image
           src="/static/gummyDesc.png"
+          // aspectRatio='1/1'
           alt="ZIZZ gummy product for daily health and wellness"
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain aspect-auto"
         />
       </motion.div>
     </motion.div>
