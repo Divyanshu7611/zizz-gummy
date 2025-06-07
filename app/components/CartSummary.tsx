@@ -208,8 +208,8 @@ type CartSummaryProps = {
 export function CartSummary({cart, layout}: CartSummaryProps) {
   const className =
     layout === 'page'
-      ? 'cart-summary-page p-6 bg-white rounded-lg shadow-sm'
-      : 'cart-summary-aside p-4 bg-gray-50 rounded-lg';
+      ? 'cart-summary-page p-6 bg-white'
+      : 'cart-summary-aside p-4 bg-gray-50';
 
   return (
     <div aria-labelledby="cart-summary" className={className}>

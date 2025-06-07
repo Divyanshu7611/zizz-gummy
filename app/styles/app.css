@@ -73,6 +73,7 @@ aside header .close {
   text-decoration: none;
   transition: all 200ms;
   width: 20px;
+  /* z-index: 1000; */
 }
 
 aside header .close:hover {
@@ -112,7 +113,7 @@ aside li {
   transition: opacity 400ms ease-in-out;
   transition: opacity 400ms;
   visibility: hidden;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .overlay .close-outside {
@@ -287,9 +288,11 @@ button.reset:hover:not(:has(> *)) {
   background: white;
   border-top: 1px solid var(--color-dark);
   bottom: 0;
+  padding-right: 10%;
   padding-top: 0.75rem;
   position: absolute;
-  width: calc(var(--aside-width) - 40px);
+  /* width: calc(var(--aside-width) - 40px); */
+  width: 100%;
 }
 
 .cart-line-quantity {
