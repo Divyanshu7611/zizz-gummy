@@ -182,6 +182,7 @@ export default function ProductCarousel({ images }: { images: ImageNode[] }) {
             >
               <Image
                 src={image.url}
+                aspectRatio="1/1"
                 alt={image.alt || `Slide ${index + 1}`}
                 width={500}
                 height={500}

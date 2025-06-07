@@ -77,9 +77,9 @@ export function Footer({
                   <input
                     type="email"
                     placeholder="Enter your Email"
-                    className="w-full px-4 py-2 text-white md:text-xl text-sm border-white border-2 focus:outline"
+                    className="w-full px-4 py-2 text-white text-xs border-white border-2 focus:outline"
                   />
-                  <button type="submit" className="bg-[#b9f4d2] px-4 py-2 md:text-xl text-sm font-semibold text-black">
+                  <button type="submit" className="bg-[#b9f4d2] px-4 py-2 cursor-pointer text-sm font-semibold text-black">
                     Subscribe
                   </button>
                 </form>

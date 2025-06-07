@@ -308,6 +308,7 @@ export function ProductItem({
                 ? `${buttonBgColor} ${buttonHoverColor}`
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
+         
           >
             {firstVariant.availableForSale
               ? sellingPlan

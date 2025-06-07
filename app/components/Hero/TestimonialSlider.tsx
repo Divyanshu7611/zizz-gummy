@@ -9,6 +9,7 @@ import Button from "../mini/Button";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useInView } from "react-intersection-observer";
+import { BsArrowUpRightCircle } from 'react-icons/bs';
 
 // Define testimonial type
 interface Testimonial {
@@ -226,6 +227,7 @@ const TestimonialSlider: React.FC = () => {
             bgColor="bg-[#1F1F1F]"
             textColor="text-[#FAFAFA]"
             aria-label="Read more testimonials about ZIZZ products"
+            icon={<BsArrowUpRightCircle/>}
           />
         </motion.div>
       </div>
