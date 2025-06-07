@@ -1,65 +1,3 @@
-// import {Link} from '@remix-run/react';
-// import {Image, Money} from '@shopify/hydrogen';
-// import type {
-//   ProductItemFragment,
-//   CollectionItemFragment,
-//   RecommendedProductFragment,
-// } from 'storefrontapi.generated';
-// import {useVariantUrl} from '~/lib/variants';
-
-// export function ProductItem({
-//   product,
-//   loading,
-// }: {
-//   product:
-//     | CollectionItemFragment
-//     | ProductItemFragment
-//     | RecommendedProductFragment;
-//   loading?: 'eager' | 'lazy';
-// }) {
-//   const variantUrl = useVariantUrl(product.handle);
-//   const image = product.featuredImage;
-
-//   return (
-//     <div className="product-item rounded shadow-sm space-y-2 bg-[#FAFAFA]">
-//       <Link
-//         key={product.id}
-//         prefetch="intent"
-//         to={variantUrl}
-//         className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A]"
-//       >
-//         {image && (
-//           <Image
-//             alt={image.altText || product.title}
-//             aspectRatio="1/1"
-//             data={image}
-//             loading={loading} 
-//             sizes="(min-width: 45em) 400px, 100vw"
-//           />
-//         )}
-//         <div className='p-2'>
-
-//         <h4 className="mt-2 text-[#1F1F1F] font-bold text-xl md:text-3xl">{product.title}</h4>
-//         <small className="text-[#1E1E1E] text-2xl md:text-4xl font-semibold">
-//           <Money data={product.priceRange.minVariantPrice} />
-//         </small>
-//         </div>
-//       </Link>
-
-//       {/* Add to Cart Button */}
-//       <button
-//         className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition-all"
-//         onClick={() => alert(`Add ${product.title} to cart`)} // replace with real function later
-//       >
-//         Add to Cart
-//       </button>
-//     </div>
-//   );
-// }
-
-
-
-
 // import { Link } from '@remix-run/react';
 // import { Image, Money } from '@shopify/hydrogen';
 // import { AddToCartButton } from './AddToCartButton';
@@ -69,100 +7,121 @@
 //   RecommendedProductFragment,
 // } from 'storefrontapi.generated';
 // import { useVariantUrl } from '~/lib/variants';
+// import { AiFillStar } from 'react-icons/ai';
 
 // export function ProductItem({
 //   product,
 //   loading,
+//   index = 0
 // }: {
 //   product:
 //     | CollectionItemFragment
 //     | ProductItemFragment
 //     | RecommendedProductFragment;
 //   loading?: 'eager' | 'lazy';
+//   index?: number;
 // }) {
-//   // Use the first variant for add-to-cart and pricing
 //   const firstVariant = product?.variants?.nodes?.[0];
 //   const image = product.featuredImage;
 //   const variantUrl = useVariantUrl(product.handle);
-  
-//   // Get short description from metafields
+
 //   const shortDescription = product.metafields?.find(
-//     (m:any) => m?.namespace === 'custom' && m?.key === 'short_description'
+//     (m: any) => m?.namespace === 'custom' && m?.key === 'short_description'
 //   )?.value;
+  
 
-//   // Check if the product is on sale (compareAtPrice > price)
-//   const isOnSale = firstVariant?.compareAtPrice?.amount && 
-//     Number(firstVariant.compareAtPrice.amount) > Number(firstVariant.price.amount);
+//   const isOnSale =
+//     firstVariant?.compareAtPrice?.amount &&
+//     Number(firstVariant.compareAtPrice.amount) >
+//       Number(firstVariant.price.amount);
 
-//   // Get subscription plan if available
-//   const sellingPlan = product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0];
+//   const sellingPlan =
+//     product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0];
 
-//   // Construct lines for AddToCartButton
 //   const lines = firstVariant?.id
-//     ? [{
-//         merchandiseId: firstVariant.id,
-//         quantity: 1,
-//         ...(sellingPlan && { sellingPlanId: sellingPlan.id }), // Include if subscription exists
-//       }]
+//     ? [
+//         {
+//           merchandiseId: firstVariant.id,
+//           quantity: 1,
+//           ...(sellingPlan && { sellingPlanId: sellingPlan.id }),
+//         },
+//       ]
 //     : [];
 
+
+//       const buttonColors = [
+//     'bg-black',
+   
+//   ];
+
+//   // Define corresponding hover colors
+//   const hoverColors = [
+//     'hover:bg-gray-800',
+//   ];
+
+//     const buttonBgColor = buttonColors[index % buttonColors.length];
+//   const buttonHoverColor = hoverColors[index % hoverColors.length];
+
+//   console.log(`ProductItem - ID: ${product.id}, Index: ${index}, Color: ${buttonColors[index % buttonColors.length]}`);
+
+
 //   return (
-//     <div className="product-item rounded shadow-sm space-y-2 bg-[#FAFAFA] p-4">
+//     <div className="rounded shadow-sm bg-[#FAFAFA] relative poppins">
 //       <Link
 //         key={product.id}
 //         prefetch="intent"
 //         to={variantUrl}
-//         className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A]"
+//         className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer rounded-xl"
 //       >
-//         {image && (
-//           <Image
-//             alt={image.altText || product.title}
-//             aspectRatio="1/1"
-//             data={image}
-//             loading={loading}
-//             sizes="(min-width: 45em) 400px, 100vw"
-//             className="w-full object-cover"
-//           />
-//         )}
+//         <div className="relative overflow-hidden h-1/2 rounded-t-md">
+//           {image && (
+//             <Image
+//               alt={image.altText || product.title}
+//               aspectRatio="1/1"
+//               data={image}
+//               loading={loading}
+//               sizes="(min-width: 45em) 400px, 100vw"
+//               className="w-full h-full object-cover rounded transition-all duration-500 ease-in-out hover:scale-105 hover:brightness-105"
+//             />
+//           )}
+
+//           {/* Out of Stock badge */}
+//           {firstVariant?.availableForSale === false && (
+//             <span className="absolute top-2 left-2 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded shadow-md z-10">
+//               Out of Stock
+//             </span>
+//           )}
+
+//           {/* Dummy Rating */}
+//           <span className="absolute top-2 right-2 bg-white text-yellow-500 text-xs md:text-sm px-2 py-1 rounded shadow-md flex items-center gap-1 z-10">
+//             <AiFillStar className="text-yellow-400" />
+//             4.5
+//           </span>
+//         </div>
+
 //         <div className="p-2">
-//           <h4 className="mt-2 text-[#1F1F1F] font-bold text-xl md:text-3xl">
+//           <h4 className="mt-2 text-[#1F1F1F] font-bold text-xs md:text-xl inter line-clamp-2 inter overflow-hidden truncate">
 //             {product.title}
 //           </h4>
-//           {/* {product.productType && (
-//             <p className="text-[#1E1E1E] text-sm md:text-base">
-//               {product.productType}
-//             </p>
-//           )} */}
-//           {shortDescription && (
-//             <p className="text-[#1E1E1E] text-sm md:text-base mt-1 line-clamp-2">
-//               {shortDescription}
+
+//           {product.description && (
+//             <p className="text-[#1E1E1E] text-[8px] md:text-sm mt-1 line-clamp-2 poppins truncate opacity-75">
+//               {product.description}
 //             </p>
 //           )}
+
 //           <div className="flex items-center gap-2 mt-2">
-//             <small className="text-[#1E1E1E] text-2xl md:text-4xl font-semibold">
-//               <Money data={firstVariant?.price || product.priceRange.minVariantPrice} />
+//             <small className="text-[#1E1E1E] text-sm md:text-xl font-semibold">
+//               <Money
+//                 data={firstVariant?.price || product.priceRange.minVariantPrice}
+//               />
 //             </small>
 //             {isOnSale && firstVariant?.compareAtPrice && (
-//               <small className="text-[#1E1E1E] text-lg md:text-xl line-through opacity-60">
+//               <small className="text-[#1E1E1E] text-xs md:text-sm line-through opacity-60 hidden md:block relative top-0.5">
 //                 <Money data={firstVariant.compareAtPrice} />
 //               </small>
 //             )}
 //           </div>
-//           {firstVariant?.availableForSale === false && (
-//             <p className="text-red-500 text-sm md:text-base mt-1">Out of Stock</p>
-//           )}
-//           {/* {product.tags?.length > 0 && (
-//             <div className="flex gap-2 mt-2">
-//               {product.tags.map((tag:any) => (
-//                 <span
-//                   key={tag}
-//                   className="text-xs bg-[#B0EACD] text-[#1F1F1F] px-2 py-1 rounded"
-//                 >
-//                   {tag}
-//                 </span>
-//               ))}
-//             </div>
-//           )} */}
 //         </div>
 //       </Link>
 
@@ -178,9 +137,9 @@
 //           disabled={!firstVariant.availableForSale}
 //         >
 //           <button
-//             className={`w-full py-2 rounded transition-all text-white ${
+//             className={`w-full py-2 transition-all text-white cursor-pointer uppercase rounded-b-md font-bold md:text-lg text-sm ${
 //               firstVariant.availableForSale
-//                 ? 'bg-black hover:bg-gray-800'
+//                 ? `${buttonBgColor} ${buttonHoverColor}`
 //                 : 'bg-gray-400 cursor-not-allowed'
 //             }`}
 //           >
@@ -198,6 +157,10 @@
 
 
 
+
+
+
+
 import { Link } from '@remix-run/react';
 import { Image, Money } from '@shopify/hydrogen';
 import { AddToCartButton } from './AddToCartButton';
@@ -207,17 +170,19 @@ import type {
   RecommendedProductFragment,
 } from 'storefrontapi.generated';
 import { useVariantUrl } from '~/lib/variants';
-import { AiFillStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
 export function ProductItem({
   product,
   loading,
+  index = 0,
 }: {
   product:
     | CollectionItemFragment
     | ProductItemFragment
     | RecommendedProductFragment;
   loading?: 'eager' | 'lazy';
+  index?: number;
 }) {
   const firstVariant = product?.variants?.nodes?.[0];
   const image = product.featuredImage;
@@ -245,15 +210,30 @@ export function ProductItem({
       ]
     : [];
 
+  // Button colors
+  const buttonColors = ['bg-black'];
+  const hoverColors = ['hover:bg-gray-800'];
+
+  const buttonBgColor = buttonColors[index % buttonColors.length];
+  const buttonHoverColor = hoverColors[index % hoverColors.length];
+
+  console.log(`ProductItem - ID: ${product.id}, Index: ${index}, Color: ${buttonColors[index % buttonColors.length]}`);
+
+  // Simulated rating (hardcoded to 4.5 for now; can be dynamic via metafield)
+  const rating = 4.5;
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
   return (
-    <div className="rounded shadow-sm bg-[#FAFAFA] relative poppins">
+    <div className="rounded-md shadow-sm bg-[#FAFAFA] relative poppins flex flex-col">
       <Link
         key={product.id}
         prefetch="intent"
         to={variantUrl}
-        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative"
+        className="block bg-[#FAFAFA] drop-shadow-xl shadow-[#0000001A] relative cursor-pointer rounded-xl flex-grow"
       >
-        <div className="relative">
+        <div className="relative overflow-hidden h-1/2 rounded-t-md">
           {image && (
             <Image
               alt={image.altText || product.title}
@@ -261,7 +241,7 @@ export function ProductItem({
               data={image}
               loading={loading}
               sizes="(min-width: 45em) 400px, 100vw"
-              className="w-full object-cover rounded"
+              className="w-full h-full object-cover rounded-t-md transition-all duration-500 ease-in-out hover:scale-105 hover:brightness-105"
             />
           )}
 
@@ -271,33 +251,40 @@ export function ProductItem({
               Out of Stock
             </span>
           )}
-
-          {/* Dummy Rating */}
-          <span className="absolute top-2 right-2 bg-white text-yellow-500 text-xs md:text-sm px-2 py-1 rounded shadow-md flex items-center gap-1 z-10">
-            <AiFillStar className="text-yellow-400" />
-            4.5
-          </span>
         </div>
 
-        <div className="p-2">
-          <h4 className="mt-2 text-[#1F1F1F] font-bold text-sm md:text-3xl inter">
+        <div className="p-2 flex flex-col h-1/2">
+          <h4 className="mt-2 text-[#1F1F1F] font-bold text-sm md:text-xl inter line-clamp-2 h-10 md:h-8 overflow-hidden">
             {product.title}
           </h4>
 
-          {shortDescription && (
-            <p className="text-[#1E1E1E] text-[10px] md:text-base mt-1 line-clamp-2 poppins">
-              {shortDescription}
+          {product.description && (
+            <p className="text-[#1E1E1E] text-[10px] md:text-sm mt-1 line-clamp-2 poppins opacity-75">
+              {product.description}
             </p>
           )}
 
+          {/* Star rating below description */}
+          <div className="flex items-center gap-1 mt-1">
+            {[...Array(fullStars)].map((_, i) => (
+              <AiFillStar key={`full-${i}`} className="text-black text-base md:text-xl" />
+            ))}
+            {hasHalfStar && (
+              <AiOutlineStar key="half" className="text-black text-base md:text-xl" />
+            )}
+            {[...Array(emptyStars)].map((_, i) => (
+              <AiOutlineStar key={`empty-${i}`} className="text-black text-base md:text-xl" />
+            ))}
+          </div>
+
           <div className="flex items-center gap-2 mt-2">
-            <small className="text-[#1E1E1E] text-xl md:text-4xl font-semibold">
+            <small className="text-[#1F1F1F] text-sm md:text-xl font-semibold">
               <Money
                 data={firstVariant?.price || product.priceRange.minVariantPrice}
               />
             </small>
             {isOnSale && firstVariant?.compareAtPrice && (
-              <small className="text-[#1E1E1E] text-lg md:text-xl line-through opacity-60 hidden md:block">
+              <small className="text-[#1E1E1E] text-xs md:text-sm line-through opacity-60 hidden md:block relative top-0.5">
                 <Money data={firstVariant.compareAtPrice} />
               </small>
             )}
@@ -317,9 +304,9 @@ export function ProductItem({
           disabled={!firstVariant.availableForSale}
         >
           <button
-            className={`w-full py-2 rounded transition-all text-white ${
+            className={`w-full py-2 transition-all text-white cursor-pointer uppercase rounded-b-md font-bold text-sm md:text-lg ${
               firstVariant.availableForSale
-                ? 'bg-black hover:bg-gray-800'
+                ? `${buttonBgColor} ${buttonHoverColor}`
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
           >

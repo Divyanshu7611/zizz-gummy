@@ -324,7 +324,7 @@ export type MoneyRecommendedProductFragment = Pick<
 
 export type RecommendedProductFragment = Pick<
   StorefrontAPI.Product,
-  'id' | 'title' | 'handle' | 'productType' | 'tags'
+  'id' | 'title' | 'handle' | 'productType' | 'tags' | 'description'
 > & {
   priceRange: {
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
@@ -337,7 +337,7 @@ export type RecommendedProductFragment = Pick<
     nodes: Array<
       Pick<
         StorefrontAPI.ProductVariant,
-        'id' | 'title' | 'availableForSale'
+        'id' | 'title' | 'availableForSale' | 'description'
       > & {
         price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
         compareAtPrice?: StorefrontAPI.Maybe<
@@ -395,7 +395,7 @@ export type RecommendedProductsQuery = {
           nodes: Array<
             Pick<
               StorefrontAPI.ProductVariant,
-              'id' | 'title' | 'availableForSale'
+              'id' | 'title' | 'availableForSale' | 'description'
             > & {
               price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
               compareAtPrice?: StorefrontAPI.Maybe<
@@ -550,7 +550,7 @@ export type MoneyProductItemFragment = Pick<
 
 export type ProductItemFragment = Pick<
   StorefrontAPI.Product,
-  'id' | 'handle' | 'title'
+  'id' | 'handle' | 'title' | 'description'
 > & {
   featuredImage?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'id' | 'altText' | 'url' | 'width' | 'height'>
@@ -659,7 +659,7 @@ export type MoneyCollectionItemFragment = Pick<
 
 export type CollectionItemFragment = Pick<
   StorefrontAPI.Product,
-  'id' | 'handle' | 'title' | 'productType' | 'tags'
+  'id' | 'handle' | 'title' | 'productType' | 'tags' | 'description'
 > & {
   featuredImage?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'id' | 'altText' | 'url' | 'width' | 'height'>
