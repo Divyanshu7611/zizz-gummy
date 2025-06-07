@@ -298,7 +298,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                     </motion.button>
                   </motion.div>
                 </div>
-                <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="hidden md:grid grid-cols-4 gap-6">
                   {response.products.nodes.map((product,index) => (
                     <motion.div
                       key={product.id}
