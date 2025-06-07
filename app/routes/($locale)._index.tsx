@@ -94,7 +94,7 @@ export default function Homepage() {
   return (
     <div className="min-h-screen mx-auto">
       <Hero />
-      <BriefCards />
+      {/* <BriefCards /> */}
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <RecommendedProducts products={data.recommendedProducts} />
       <GummyDesc />
@@ -277,7 +277,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                   }
                   </Swiper>
                   <motion.div
-                    className="flex gap-4 mt-1 justify-start"
+                    className="flex gap-4 mt-3 justify-start"
                     variants={itemVariants}
                   >
                     <motion.button
