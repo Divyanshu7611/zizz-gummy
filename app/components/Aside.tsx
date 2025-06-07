@@ -55,7 +55,7 @@ export function Aside({
   return (
     <div
       aria-modal
-      className={`overlay ${expanded ? 'expanded' : ''}`}
+      className={`overlay ${expanded ? 'expanded z-[1000]' : ''}`}
       role="dialog"
     >
       <button className="close-outside" onClick={close} />
