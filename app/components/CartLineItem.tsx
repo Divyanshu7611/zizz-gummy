@@ -209,14 +209,14 @@ export function CartLineItem({
   const {close} = useAside();
 
   return (
-    <li className="flex items-center space-x-6 md:p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 mb-4 border border-gray-100">
+    <li className="flex items-center space-x-6 md:py-2 md:px-2 px-2 py-2 bg-white rounded-md shadow-md hover:shadow-md transition-shadow duration-200 mb-4 border border-gray-300">
       {image && (
         <Image
           alt={title}
           aspectRatio="1/1"
           data={image}
-          height={120}
-          width={120}
+          height={160}
+          width={160}
           className="rounded-lg object-cover border border-gray-200"
           loading="lazy"
         />

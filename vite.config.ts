@@ -36,10 +36,10 @@ export default defineConfig({
   },
   server:{
     host:true,
-    allowedHosts:[
-      'localhost',
-      'f4b3-2401-4900-7aab-6335-29c1-e778-dae9-a1c2.ngrok-free.app',
-    ],
+    // allowedHosts:[
+    //   'localhost',
+    //   'f4b3-2401-4900-7aab-6335-29c1-e778-dae9-a1c2.ngrok-free.app',
+    // ],
   },
   ssr: {
     optimizeDeps: {

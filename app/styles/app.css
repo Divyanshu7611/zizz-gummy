@@ -262,6 +262,7 @@ button.reset:hover:not(:has(> *)) {
   height: 100%;
   max-height: calc(100vh - var(--cart-aside-summary-height));
   overflow-y: auto;
+  /* overflow-x: auto; */
   width: auto;
 }
 
