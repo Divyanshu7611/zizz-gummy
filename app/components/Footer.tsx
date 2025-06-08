@@ -22,7 +22,7 @@ export function Footer({
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="bg-[#181818] text-white px-8 pt-12 pb-5">
+          <footer className="bg-[#181818] text-white px-4 pt-12 pb-5">
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               {/* Branding */}
               <div>
