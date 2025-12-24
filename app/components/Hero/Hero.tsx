@@ -169,7 +169,7 @@ function Hero() {
 
                   className="
                     px-5 py-2 md:px-10 md:py-3 md:w-48 w-28
-                    rounded-lg
+                    rounded-md
                     text-black font-semibold
                     text-xs md:text-base cursor-pointer
                     whitespace-nowrap
@@ -183,7 +183,7 @@ function Hero() {
                 <button
                   className="
                     px-5 py-2 md:px-10 md:py-3 w-28 md:w-48
-                    rounded-lg cursor-pointer
+                    rounded-md cursor-pointer
                     border border-black/20
                     bg-white/70 backdrop-blur
                     text-black font-semibold
