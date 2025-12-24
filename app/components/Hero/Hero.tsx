@@ -95,8 +95,6 @@
 // }
 
 // export default Hero;
-
-
 import React from 'react';
 import { Image } from '@shopify/hydrogen';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -107,28 +105,19 @@ import 'swiper/css';
 function Hero() {
   const slides = [
     {
-      desktop: '/Hero/1.png',
-      mobile: '/Hero/16.png',
-    },
-    {
       desktop: '/Hero/2.png',
       mobile: '/Hero/17.png',
+      themeColor: '#9BFFB2',
     },
     {
-      desktop: '/Hero/3.png',
-      mobile: '/Hero/18.png',
-    },
-      {
       desktop: '/Hero/4.png',
       mobile: '/Hero/19.png',
+      themeColor: '#89c5ff',
     },
-      {
-      desktop: '/Hero/5.png',
-      mobile: '/Hero/20.png',
-    },
-     {
+    {
       desktop: '/Hero/6.png',
       mobile: '/Hero/21.png',
+      themeColor: '#b8b8f7',
     },
   ];
 
@@ -137,7 +126,7 @@ function Hero() {
       <Swiper
         modules={[Autoplay]}
         autoplay={{
-          delay: 2000,
+          delay: 2500,
           disableOnInteraction: false,
         }}
         loop
@@ -145,19 +134,69 @@ function Hero() {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            {/* Desktop Image */}
-            <Image
-              src={slide.desktop}
-              alt={`Hero Desktop ${index + 1}`}
-              className="hidden md:block w-full h-auto object-cover"
-            />
+            <div className="relative w-full">
 
-            {/* Mobile Image */}
-            <Image
-              src={slide.mobile}
-              alt={`Hero Mobile ${index + 1}`}
-              className="block md:hidden w-full h-[240px] sm:h-[360px] object-cover"
-            />
+              {/* Desktop Image */}
+              <Image
+                src={slide.desktop}
+                alt={`Hero Desktop ${index + 1}`}
+                className="hidden md:block w-full h-auto object-cover"
+              />
+
+              {/* Mobile Image */}
+              <Image
+                src={slide.mobile}
+                alt={`Hero Mobile ${index + 1}`}
+                className="block md:hidden w-full h-full object-cover"
+              />
+
+              {/* Buttons Overlay */}
+              <div
+                className="
+                  absolute bottom-4 md:bottom-10
+                  left-1/2
+                  -translate-x-[50%] md:-translate-x-1/2
+                  flex gap-3 md:gap-4
+                  z-10
+                "
+              >
+                {/* Buy Now */}
+                <button
+                  style={{
+                    backgroundColor: slide.themeColor,
+                    boxShadow: `0 8px 30px ${slide.themeColor}80`,
+                  }}
+
+                  className="
+                    px-5 py-2 md:px-10 md:py-3 md:w-48 w-28
+                    rounded-lg
+                    text-black font-semibold
+                    text-xs md:text-base cursor-pointer
+                    whitespace-nowrap
+                    hover:scale-105 transition
+                  "
+                >
+                  Buy Now
+                </button>
+
+                {/* Learn More */}
+                <button
+                  className="
+                    px-5 py-2 md:px-10 md:py-3 w-28 md:w-48
+                    rounded-lg cursor-pointer
+                    border border-black/20
+                    bg-white/70 backdrop-blur
+                    text-black font-semibold
+                    text-xs md:text-base
+                    whitespace-nowrap
+                    hover:bg-white transition
+                  "
+                >
+                  Learn More
+                </button>
+              </div>
+
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
