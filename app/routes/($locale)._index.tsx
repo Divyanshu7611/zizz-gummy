@@ -1,4 +1,4 @@
-import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {BsArrowUpRightCircle} from 'react-icons/bs';
 import {Suspense} from 'react';
@@ -10,6 +10,9 @@ import BriefCards from '~/components/Hero/BriefCards';
 import GummyDesc from '~/components/Hero/GummyDesc';
 import GummyProductSection from '~/components/Hero/ProductSection';
 import TestimonialSlider from '~/components/Hero/TestimonialSlider';
+import WhyChooseZizz from '~/components/Hero/WhyChooseZizz';
+import ScienceBackedWellness from '~/components/Hero/ScienceBackedWellness';
+import NewsletterSignup from '~/components/Hero/NewsletterSignup';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -29,7 +32,7 @@ import { useInView } from 'react-intersection-observer';
 
 
 interface RecommendedProductsProps {
-  products: Promise<RecommendedProductsQuery | null>;
+  products: any;
 }
 
 export const meta: MetaFunction = () => {
@@ -37,29 +40,28 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
-  return {...deferredData, ...criticalData};
+  return criticalData;
 }
 
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collections}] = await Promise.all([
+  const [{collections}, recommendedProducts] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
+    context.storefront.query(RECOMMENDED_PRODUCTS_QUERY),
   ]);
+  
+  console.log('Products loaded:', {
+    hasProducts: !!recommendedProducts?.products,
+    productCount: recommendedProducts?.products?.nodes?.length || 0,
+    products: recommendedProducts?.products?.nodes?.map((p: any) => ({
+      id: p.id,
+      title: p.title,
+      handle: p.handle,
+    })),
+  });
+  
   return {
     featuredCollection: collections.nodes[0],
-  };
-}
-
-function loadDeferredData({context}: LoaderFunctionArgs) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      console.error('Recommended Products Query Error:', error);
-      return null;
-    });
-
-  return {
     recommendedProducts,
   };
 }
@@ -86,7 +88,6 @@ export default function Homepage() {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: 'easeOut',
       },
     },
   };
@@ -96,10 +97,12 @@ export default function Homepage() {
       <Hero />
       {/* <BriefCards /> */}
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
-      <RecommendedProducts products={data.recommendedProducts} />
-      <GummyDesc />
-      <GummyProductSection />
-      <motion.div
+      <RecommendedProducts products={data.recommendedProducts || null} />
+      {/* <GummyDesc /> */}
+      <WhyChooseZizz />
+      <ScienceBackedWellness />
+      {/* <GummyProductSection /> */}
+      {/* <motion.div
         className="w-full mt-10"
         variants={containerVariants}
         initial="hidden"
@@ -112,8 +115,9 @@ export default function Homepage() {
             className="md:h-auto h-[175px]"
           />
         </motion.div>
-      </motion.div>
+      </motion.div> */}
       <TestimonialSlider />
+      <NewsletterSignup />
     </div>
   );
 }
@@ -207,7 +211,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
   return (
     <motion.div
       ref={ref}
-      className="recommended-products px-3 py-8 max-w-[1440px] mx-auto"
+      className="recommended-products px-3 py-8 max-w-360 mx-auto"
       variants={containerVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
@@ -231,21 +235,33 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
           />
         </motion.div>
       </motion.div>
-      <Suspense fallback={<div className="text-center text-lg">Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => {
-            console.log(
-              "Recommended Products Response:",
-              JSON.stringify(response, null, 2)
-            );
-            if (!response || !response.products?.nodes?.length) {
-              return (
-                <div className="text-center text-lg text-gray-600">
-                  No recommended products available.
-                </div>
-              );
-            }
-            return (
+      {(() => {
+        console.log(
+          "Recommended Products Response:",
+          JSON.stringify(products, null, 2)
+        );
+        
+        // Check if response is null or undefined
+        if (!products) {
+          return (
+            <div className="text-center text-lg text-gray-600 py-8">
+              <p className="mb-2">Unable to load products from Shopify.</p>
+              <p className="text-sm">Please ensure your store has products and the API connection is working.</p>
+            </div>
+          );
+        }
+        
+        // Check if products array exists and has items
+        if (!products.products?.nodes?.length) {
+          return (
+            <div className="text-center text-lg text-gray-600 py-8">
+              <p className="mb-2">No products available.</p>
+              <p className="text-sm">Add products to your Shopify store to see them here.</p>
+            </div>
+          );
+        }
+        
+        return (
               <div>
                 <div className="block md:hidden">
                   <Swiper
@@ -260,7 +276,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                     grabCursor={true}
                     onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
                   >
-                    {response.products.nodes.map((product,index) => {
+                    {products.products.nodes.map((product,index) => {
 
                       return(<SwiperSlide key={product.id}>
                         <motion.div
@@ -268,7 +284,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                           initial="hidden"
                           animate={inView ? "visible" : "hidden"}
                         >
-                          <ProductItem product={product} index={index}/>
+                          <ProductItem product={product as any} index={index}/>
                         </motion.div>
                       </SwiperSlide>
                     )
@@ -299,7 +315,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                   </motion.div>
                 </div>
                 <div className="hidden md:grid grid-cols-4 gap-6">
-                  {response.products.nodes.map((product,index) => (
+                  {products.products.nodes.map((product,index) => (
                     <motion.div
                       key={product.id}
                       variants={productVariants}
@@ -312,9 +328,7 @@ const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ products }) =
                 </div>
               </div>
             );
-          }}
-        </Await>
-      </Suspense>
+      })()}
     </motion.div>
   );
 };
@@ -406,7 +420,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 4) {
       nodes {
         ...RecommendedProduct
       }
