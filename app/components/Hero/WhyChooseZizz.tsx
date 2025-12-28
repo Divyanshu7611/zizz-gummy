@@ -83,8 +83,14 @@ const WhyChooseZizz: React.FC = () => {
         className="text-center mb-8 md:mb-12"
         variants={headingVariants}
       >
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1F1F1F] mb-3">
-          Why Choose Zizz?
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1F1F1F] mb-3 flex items-center justify-center gap-2 flex-wrap">
+          <span>Why Choose</span>
+          <img 
+            src="/static/logo.png" 
+            alt="Zizz" 
+            className="h-5 md:h-6 lg:h-8 inline-block"
+          />
+          <span>?</span>
         </h2>
         <p className="text-sm md:text-base lg:text-lg text-[#666666] max-w-2xl mx-auto">
           Your health and trust are our top priorities. Here's what sets us apart

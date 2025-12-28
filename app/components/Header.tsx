@@ -58,7 +58,7 @@ export function Header({
 
   return (
     <>
-      <div className="fixed top-0 z-[200] w-full">
+      <div className="fixed top-0 z-200 w-full">
         <HeaderTop />
         <header
           className={`w-full bg-white ${
@@ -66,7 +66,7 @@ export function Header({
           } transition-shadow duration-300 ease-in-out`}
           style={{ '--header-height': '80px' } as React.CSSProperties}
         >
-          <div className="max-w-[1440px] mx-auto px-3 py-3 flex items-center justify-between w-full">
+          <div className="max-w-360 mx-auto px-3 py-3 flex items-center justify-between w-full">
             <div className="md:hidden block">
               <HeaderMenuMobileToggle />
             </div>
@@ -80,7 +80,7 @@ export function Header({
               <img
                 src="/static/logo.png"
                 alt="logo"
-                className="md:w-20 w-12 md:h-12 h-6 object-contain"
+                className="md:w-12 w-10 md:h-12 h-6 object-contain"
               />
             </NavLink>
 
@@ -339,6 +339,15 @@ const FALLBACK_HEADER_MENU = {
       title: 'About',
       type: 'PAGE',
       url: '/pages/about',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609599033',
+      resourceId: null,
+      tags: [],
+      title: 'Contact',
+      type: 'HTTP',
+      url: '/contact',
       items: [],
     },
   ],

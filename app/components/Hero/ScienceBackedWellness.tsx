@@ -7,7 +7,7 @@ const ScienceBackedWellness: React.FC = () => {
   // Ingredients data
   const ingredients = [
     {
-      image: '/Hero/blissProduct.png',
+      image: '/static/yellow-pills-arrangement.jpg',
       title: 'The Science of Biotin',
       description:
         "Biotin (Vitamin B7) plays a crucial role in keratin production, the protein that makes up hair, skin, and nails. Our hair growth formula delivers optimal biotin levels for visible results.",
@@ -18,7 +18,7 @@ const ScienceBackedWellness: React.FC = () => {
       icon: <GiDna2 size={24} className="text-[#4CAF50]" />,
     },
     {
-      image: '/Hero/blissProduct.png',
+      image: '/static/man-wearing-t-shirt-gesturing.jpg',
       title: 'Natural Sleep Support',
       description:
         'Melatonin regulates your sleep-wake cycle naturally. Combined with L-theanine, our formula promotes relaxation without next day grogginess, helping you achieve restorative sleep.',
@@ -29,7 +29,7 @@ const ScienceBackedWellness: React.FC = () => {
       icon: <GiNightSleep size={24} className="text-[#5C6BC0]" />,
     },
     {
-      image: '/Hero/blissProduct.png',
+      image: '/static/CA + D3.png',
       title: 'Calcium & Vitamin D3',
       description:
         'Calcium absorption requires Vitamin D3. Our enhanced formula ensures maximum bioavailability, supporting bone density, muscle function, and overall skeletal health throughout life.',

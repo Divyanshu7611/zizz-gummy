@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { useLoaderData, type MetaFunction, Form, useFetcher } from '@remix-run/react';
-import ProductBenefits from '~/components/Product/ProductBenefits';
-import ProductSection from '~/components/Hero/ProductSection';
+import { type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, type MetaFunction, useFetcher } from '@remix-run/react';
 import { Image, CartForm } from '@shopify/hydrogen';
-import { toast } from 'sonner';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -13,66 +10,58 @@ import {
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import { ProductPrice } from '~/components/ProductPrice';
-import { ProductImage } from '~/components/ProductImage';
-import { ProductForm } from '~/components/ProductForm';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { toast } from 'sonner';
+
+import ProductBenefits from '~/components/Product/ProductBenefits';
+import ProductSection from '~/components/Hero/ProductSection';
 import ProductCarousel from '~/components/Product/ProductCarousel';
-import { FaQ, FaStar } from 'react-icons/fa6';
-import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import Button from '~/components/mini/Button';
 import TestimonialSlider from '~/components/Product/ProductTestimonialSlider';
 import FAQ from '~/components/Product/Faqs';
-import type { ProductFragment, ProductVariantFragment } from 'storefrontapi.generated';
+import { ProductPrice } from '~/components/ProductPrice';
+import { ProductForm } from '~/components/ProductForm';
+import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [
-    { title: `Zizz Gummy | ${data?.product.title ?? ''}` },
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
-  ];
-};
+import { FaStar } from 'react-icons/fa6';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
+import { ShoppingCart, Truck, Package, Heart, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => [
+  { title: `Zizz Gummy | ${data?.product.title ?? ''}` },
+  { rel: 'canonical', href: `/products/${data?.product.handle}` },
+];
 
 export async function loader(args: LoaderFunctionArgs) {
-  const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
-  return { ...deferredData, ...criticalData };
+  return { ...criticalData };
 }
 
 async function loadCriticalData({ context, params, request }: LoaderFunctionArgs) {
   const { handle } = params;
   const { storefront } = context;
 
-  if (!handle) {
-    throw new Error('Expected product handle to be defined');
-  }
+  if (!handle) throw new Error('Product handle missing');
 
-  const [{ product }] = await Promise.all([
-    storefront.query(PRODUCT_QUERY, {
-      variables: { handle, selectedOptions: getSelectedProductOptions(request) },
-    }),
-  ]);
+  const { product } = await storefront.query(PRODUCT_QUERY, {
+    variables: {
+      handle,
+      selectedOptions: getSelectedProductOptions(request),
+    },
+  });
 
-  if (!product?.id) {
-    throw new Response(null, { status: 404 });
-  }
+  if (!product?.id) throw new Response(null, { status: 404 });
 
   redirectIfHandleIsLocalized(request, { handle, data: product });
 
   return { product };
 }
 
-function loadDeferredData({ context, params }: LoaderFunctionArgs) {
-  return {};
-}
-
 export default function Product() {
   const { product } = useLoaderData<typeof loader>();
-  const [counter, setCounter] = useState<number>(1);
-  const addToCartFetcher = useFetcher(); // Fetcher for "Add to Cart"
-  const buyNowFetcher = useFetcher(); // Fetcher for "Buy Now"
+  const [counter, setCounter] = useState(1);
+  const [openSection, setOpenSection] = useState<string | null>('Product Info');
+
+  const addToCartFetcher = useFetcher();
+  const buyNowFetcher = useFetcher();
 
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -86,332 +75,393 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const { title, descriptionHtml } = product;
-
   const medias = product.media.edges.map(({ node }: any) => ({
     url: node.image?.url || node.previewImage?.url,
     alt: node.alt || 'Product Image',
   }));
 
-  const sellingPlan = product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0];
+  const sellingPlan =
+    product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0];
 
-  const incrementCounter = () => setCounter((prev) => prev + 1);
-  const decrementCounter = () => setCounter((prev) => (prev > 1 ? prev - 1 : 1));
-
-  const handleBuyNow = async () => {
-    // Add the product to the cart using buyNowFetcher
-    await buyNowFetcher.submit(
-      {
-        [CartForm.INPUT_NAME]: JSON.stringify({
-          action: CartForm.ACTIONS.LinesAdd,
-          inputs: {
-            lines: [
-              {
-                merchandiseId: selectedVariant.id,
-                quantity: counter,
-                ...(sellingPlan && { sellingPlanId: sellingPlan.id }),
-              },
-            ],
-          },
-        }),
-      },
-      { method: 'POST', action: '/cart' },
-    );
-  };
-
-  // Redirect to /cart after the Buy Now fetcher completes adding to cart
+  // Redirect after Buy Now
   if (buyNowFetcher.state === 'idle' && buyNowFetcher.data) {
     window.location.href = '/cart';
   }
 
-  console.log('Selected Variant:', JSON.stringify(selectedVariant, null, 2));
-  console.log('Add to Cart Fetcher State:', addToCartFetcher.state);
-  console.log('Buy Now Fetcher State:', buyNowFetcher.state);
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  // Parse description HTML into sections based on headings (client-side only)
+  const parseDescription = (html: string) => {
+    if (typeof window === 'undefined') {
+      // Server-side: return full description as one section
+      return { 'Product Info': html };
+    }
+    
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const sections: { [key: string]: string } = {};
+    
+    let currentSection = 'Product Info';
+    let currentContent: string[] = [];
+    
+    const elements = Array.from(doc.body.children);
+    
+    elements.forEach((element) => {
+      const text = element.textContent?.trim() || '';
+      const tagName = element.tagName.toLowerCase();
+      
+      // Check if it's a heading (strong tag or h1-h6 or p with strong inside)
+      const hasStrongChild = element.querySelector('strong');
+      const isHeading = tagName === 'strong' || tagName.match(/^h[1-6]$/) || (tagName === 'p' && hasStrongChild);
+      
+      if (isHeading && text && text.length < 100) {
+        // Save previous section
+        if (currentContent.length > 0) {
+          sections[currentSection] = currentContent.join('');
+        }
+        // Start new section
+        currentSection = text.replace(/\*\*/g, '').trim();
+        currentContent = [];
+      } else if (text) {
+        currentContent.push(element.outerHTML);
+      }
+    });
+    
+    // Save last section
+    if (currentContent.length > 0) {
+      sections[currentSection] = currentContent.join('');
+    }
+    
+    return sections;
+  };
+
+  const descriptionSections = parseDescription(product.descriptionHtml);
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row md:gap-10 gap-5 justify-between max-w-screen-xl mx-auto py-5 px-5">
-        <div className='flex flex-col'>
-          <h1 className="inter font-bold text-xl md:text-4xl text-black md:hidden block">{title}</h1>
-          <div
-            className="inter font-normal text-sm md:text-2xl md:hidden block"
-            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-          />
-        </div>
-        <div className="w-full md:w-1/2">
-          <ProductCarousel images={medias} />
-        </div>
+      {/* ================= TOP SECTION ================= */}
+      <div className="max-w-screen-xl mx-auto px-5 py-8">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-10">
 
-        <div className="w-full md:w-1/2 flex flex-col justify-between gap-2 md:px-0 py-2">
-          <h1 className="inter font-bold text-3xl md:text-4xl text-black md:block hidden">{title}</h1>
-          <div
-            className="inter font-normal text-lg md:text-2xl hidden md:block"
-            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-          />
-          <h2 className="font-bold text-sm md:text-xl">For Both Men and Women</h2>
-          <div className="md:mt-5 mt-0 flex justify-between items-start sm:items-center gap-3">
-            <ProductPrice
-              price={selectedVariant?.price}
-              compareAtPrice={selectedVariant?.compareAtPrice}
-            />
-            <div className="flex items-center gap-1 inter text-sm md:text-base">
-              <FaStar className="text-[#FFCC00] text-lg" />
-              <span className="md:font-semibold font-medium text-xs md:text-lg">4.5/5 (50+ Reviews)</span>
+          {/* IMAGE SECTION - Full Height with Sticky */}
+          <div className="w-full md:w-1/2">
+            <div className="sticky top-4">
+              <ProductCarousel images={medias} />
             </div>
           </div>
-          <div className="flex flex-col md:mt-6 mt-1">
-            <h3 className="text-sm md:text-xl md:font-bold font-semibold inter">Pick your pack:</h3>
-            <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
-          </div>
-          <div className="flex mt-6 gap-3 items-center">
-            <div className="flex items-center justify-between bg-[#1F1F1F] text-white md:px-4 py-1.5 px-2 text-xl font-bold rounded-sm w-2/3 md:w-1/3">
-              <button onClick={decrementCounter} aria-label="Decrease quantity" className='cursor-pointer'>
-                <IoIosArrowBack />
-              </button>
-              <span>{counter}</span>
-              <button onClick={incrementCounter} aria-label="Increase quantity" className='cursor-pointer'>
-                <IoIosArrowForward />
-              </button>
+
+          {/* PRODUCT INFO */}
+          <div className="w-full md:w-1/2 flex flex-col gap-4">
+
+            {/* TITLE */}
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1F1F1F]">
+              {product.title}
+            </h1>
+
+            {/* RATING */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar key={i} className="text-[#FFCC00] text-sm" />
+                ))}
+              </div>
+              <span className="text-sm text-gray-600">9 Reviews</span>
             </div>
 
-            <div className='w-full'>
-              {selectedVariant?.availableForSale ? (
-                <addToCartFetcher.Form method="post" action="/cart">
-                  <input
-                    type="hidden"
-                    name={CartForm.INPUT_NAME}
-                    value={JSON.stringify({
+            {/* PRICE */}
+            <div className="text-3xl font-bold text-[#1F1F1F]">
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+            </div>
+
+            {/* DISCOUNT TAG */}
+            {selectedVariant?.compareAtPrice && (
+              <div className="text-[#4CAF50] text-sm font-medium cursor-pointer">
+                ✓ Click To Apply A Discount
+              </div>
+            )}
+
+            {/* QUANTITY + ADD TO CART */}
+            <div className="flex gap-3 items-center mt-2">
+              <div className="flex items-center justify-between bg-white border-2 border-gray-300 px-4 py-2 rounded-md w-32">
+                <button
+                  onClick={() => setCounter(Math.max(1, counter - 1))}
+                  className="text-xl"
+                >
+                  −
+                </button>
+                <span className="font-semibold">{counter}</span>
+                <button onClick={() => setCounter(counter + 1)} className="text-xl">
+                  +
+                </button>
+              </div>
+
+              <addToCartFetcher.Form
+                method="post"
+                action="/cart"
+                className="flex-1"
+              >
+                <input
+                  type="hidden"
+                  name={CartForm.INPUT_NAME}
+                  value={JSON.stringify({
+                    action: CartForm.ACTIONS.LinesAdd,
+                    inputs: {
+                      lines: [
+                        {
+                          merchandiseId: selectedVariant.id,
+                          quantity: counter,
+                          ...(sellingPlan && {
+                            sellingPlanId: sellingPlan.id,
+                          }),
+                        },
+                      ],
+                    },
+                  })}
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-black hover:bg-gray-800 text-white py-3 font-bold rounded-md transition-colors"
+                  onClick={() => toast.success('Added to Cart')}
+                  disabled={!selectedVariant?.availableForSale}
+                >
+                  {selectedVariant?.availableForSale ? 'ADD TO CART' : 'SOLD OUT'}
+                </button>
+              </addToCartFetcher.Form>
+            </div>
+
+            {/* BUY NOW */}
+            <button
+              onClick={() =>
+                buyNowFetcher.submit(
+                  {
+                    [CartForm.INPUT_NAME]: JSON.stringify({
                       action: CartForm.ACTIONS.LinesAdd,
                       inputs: {
                         lines: [
                           {
                             merchandiseId: selectedVariant.id,
                             quantity: counter,
-                            ...(sellingPlan && { sellingPlanId: sellingPlan.id }),
+                            ...(sellingPlan && {
+                              sellingPlanId: sellingPlan.id,
+                            }),
                           },
                         ],
                       },
-                    })}
-                  />
+                    }),
+                  },
+                  { method: 'POST', action: '/cart' },
+                )
+              }
+              className="w-full border-2 border-black text-black py-3 font-bold rounded-md hover:bg-black hover:text-white transition-colors"
+              disabled={!selectedVariant?.availableForSale}
+            >
+              BUY IT NOW
+            </button>
+
+            {/* PACK OPTIONS */}
+            <div className="mt-4">
+              <ProductForm
+                productOptions={productOptions}
+                selectedVariant={selectedVariant}
+              />
+            </div>
+
+            {/* DELIVERY TIMELINE */}
+            <div className="flex items-center justify-between py-4 md:py-6 border-t border-b border-gray-200 mt-4">
+              <div className="flex flex-col items-center flex-1">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-black flex items-center justify-center text-white mb-1 md:mb-2">
+                  <ShoppingCart size={14} className="md:w-5 md:h-5" />
+                </div>
+                <p className="text-[8px] md:text-xs font-semibold">Dec 28th</p>
+                <p className="text-[7px] md:text-xs text-gray-500">Ordered</p>
+              </div>
+              <div className="flex-1 h-0.5 bg-gray-300 mx-1 md:mx-2 max-w-[40px] md:max-w-none"></div>
+              <div className="flex flex-col items-center flex-1">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-black flex items-center justify-center text-white mb-1 md:mb-2">
+                  <Truck size={14} className="md:w-5 md:h-5" />
+                </div>
+                <p className="text-[8px] md:text-xs font-semibold text-center">Dec 29th - 30th</p>
+                <p className="text-[7px] md:text-xs text-gray-500">Order Ready</p>
+              </div>
+              <div className="flex-1 h-0.5 bg-gray-300 mx-1 md:mx-2 max-w-[40px] md:max-w-none"></div>
+              <div className="flex flex-col items-center flex-1">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-black flex items-center justify-center text-white mb-1 md:mb-2">
+                  <Package size={14} className="md:w-5 md:h-5" />
+                </div>
+                <p className="text-[8px] md:text-xs font-semibold text-center">Jan 7th - 9th</p>
+                <p className="text-[7px] md:text-xs text-gray-500">Delivered</p>
+              </div>
+            </div>
+
+            {/* COLLAPSIBLE SECTIONS - Dynamic from Description */}
+            <div className="mt-6 space-y-3">
+              {Object.entries(descriptionSections).map(([title, content], index) => (
+                <div key={index} className="border border-gray-200 rounded-lg">
                   <button
-                    type="submit"
-                    className="bg-[#6D9773] text-white px-4 py-2 rounded-sm w-full flex items-center justify-center font-bold inter disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer hover:bg-[#5B7F5F] transition-colors duration-150"
-                    disabled={addToCartFetcher.state !== 'idle'}
-                    onClick={() => toast.success('Added to Cart')}
+                    onClick={() => toggleSection(title)}
+                    className="w-full flex items-center justify-between p-4 text-left font-semibold text-sm hover:bg-gray-50 transition-colors"
                   >
-                    {addToCartFetcher.state === 'submitting' ? (
-                      <span className='loader w-full h-full'></span>
+                    <span className="flex items-center gap-2">
+                      <span className="text-[#4CAF50]">✓</span>
+                      {title.toUpperCase()}
+                    </span>
+                    {openSection === title ? (
+                      <ChevronUp size={20} className="text-gray-600" />
                     ) : (
-                      'ADD TO CART'
+                      <ChevronDown size={20} className="text-gray-600" />
                     )}
                   </button>
-                </addToCartFetcher.Form>
-              ) : (
-                <button
-                  className="bg-gray-400 text-white px-4 py-2 rounded-sm w-full sm:w-2/3 font-bold inter cursor-not-allowed"
-                  disabled
-                >
-                  SOLD OUT
-                </button>
-              )}
+                  {openSection === title && (
+                    <div
+                      className="px-4 pb-4 text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-          </div>
-          <div className="w-full">
-            {selectedVariant?.availableForSale ? (
-              <button
-                onClick={handleBuyNow}
-                className="bg-[#6D9773] disabled:bg-gray-400 text-white px-4 py-2 rounded-sm flex justify-center items-center w-full font-bold inter hover:bg-[#5B7F5F] transition-colors duration-150 cursor-pointer"
-                disabled={buyNowFetcher.state !== 'idle'}
-              >
-                {buyNowFetcher.state === 'submitting' ? (
-                  <span className='loader'></span>
-                ) : (
-                  'BUY NOW'
-                )}
-              </button>
-            ) : (
-              <button
-                className="bg-gray-400 text-white px-4 py-2 rounded-sm w-full font-bold inter cursor-not-allowed"
-                disabled
-              >
-                SOLD OUT
-              </button>
-            )}
+
+            {/* TRUST BADGES */}
+            <div className="flex items-center justify-around py-6 mt-6 border-t border-gray-200">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-2">
+                  <Heart size={24} className="text-red-500" />
+                </div>
+                <p className="text-xs font-semibold text-center">100k Customers</p>
+                <p className="text-xs text-gray-500">Loved Us</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-2">
+                  <RotateCcw size={24} className="text-blue-500" />
+                </div>
+                <p className="text-xs font-semibold text-center">Hassle-Free</p>
+                <p className="text-xs text-gray-500">Returns</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-2">
+                  <Truck size={24} className="text-green-500" />
+                </div>
+                <p className="text-xs font-semibold text-center">Free Shipping</p>
+                <p className="text-xs text-gray-500">PAN India</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* ================= BELOW SECTIONS ================= */}
       <Analytics.ProductView
         data={{
           products: [
             {
               id: product.id,
               title: product.title,
-              price: selectedVariant?.price.amount || '0',
+              price: selectedVariant.price.amount,
               vendor: product.vendor,
-              variantId: selectedVariant?.id || '',
-              variantTitle: selectedVariant?.title || '',
+              variantId: selectedVariant.id,
+              variantTitle: selectedVariant.selectedOptions.map(o => o.value).join(' / ') || 'Default',
               quantity: counter,
             },
           ],
         }}
       />
+
       <div className="bg-[#FAFAFA]">
         <ProductBenefits />
-        <Image src="/static/ProductPageDesc.png" alt="gummy showcase" className="h-[200px] md:h-[600px]" />
+        <Image
+          src="/static/ProductPageDesc.png"
+          alt="product showcase"
+          className="h-[200px] md:h-[600px]"
+        />
         <TestimonialSlider />
       </div>
+
       <ProductSection />
       <FAQ />
     </div>
   );
 }
 
-const MEDIA_FIELDS_FRAGMENT = `#graphql
-  fragment MediaFields on Media {
-    mediaContentType
-    alt
-    previewImage {
-      url
-      altText
-    }
-    ... on MediaImage {
-      image {
-        url
-        altText
-        width
-        height
-      }
-    }
-    ... on Video {
-      sources {
-        url
-        mimeType
-        format
-        height
-        width
-      }
-    }
-    ... on Model3d {
-      sources {
-        url
-        mimeType
-        format
-        filesize
-      }
-    }
-    ... on ExternalVideo {
-      embeddedUrl
-      host
-    }
-  }
-` as const;
 
-const PRODUCT_VARIANT_FRAGMENT = `#graphql
-  fragment ProductVariant on ProductVariant {
-    availableForSale
-    compareAtPrice {
-      amount
-      currencyCode
-    }
-    id
-    image {
-      __typename
+/* ================= GRAPHQL ================= */
+
+const PRODUCT_QUERY = `#graphql
+  query Product($handle: String!, $selectedOptions: [SelectedOptionInput!]!) {
+    product(handle: $handle) {
       id
-      url
-      altText
-      width
-      height
-    }
-    price {
-      amount
-      currencyCode
-    }
-    product {
       title
+      vendor
       handle
-    }
-    selectedOptions {
-      name
-      value
-    }
-    sku
-    title
-    unitPrice {
-      amount
-      currencyCode
-    }
-  }
-` as const;
-
-const PRODUCT_FRAGMENT = `#graphql
-  fragment Product on Product {
-    id
-    title
-    vendor
-    handle
-    descriptionHtml
-    description
-    encodedVariantExistence
-    encodedVariantAvailability
-    media(first: 10) {
-      edges {
-        node {
-          ...MediaFields
-        }
-      }
-    }
-    options {
-      name
-      optionValues {
-        name
-        firstSelectableVariant {
-          ...ProductVariant
-        }
-        swatch {
-          color
-          image {
+      descriptionHtml
+      encodedVariantExistence
+      encodedVariantAvailability
+      media(first: 10) {
+        edges {
+          node {
             previewImage {
               url
             }
           }
         }
       }
-    }
-    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
-      ...ProductVariant
-    }
-    adjacentVariants(selectedOptions: $selectedOptions) {
-      ...ProductVariant
-    }
-    seo {
-      description
-      title
-    }
-    sellingPlanGroups(first: 1) {
-      nodes {
-        sellingPlans(first: 1) {
-          nodes {
-            id
-            name
+      selectedOrFirstAvailableVariant(
+        selectedOptions: $selectedOptions
+      ) {
+        id
+        availableForSale
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+        selectedOptions {
+          name
+          value
+        }
+        product {
+          handle
+          title
+        }
+      }
+      adjacentVariants(selectedOptions: $selectedOptions) {
+        id
+        availableForSale
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+        selectedOptions {
+          name
+          value
+        }
+      }
+      sellingPlanGroups(first: 1) {
+        nodes {
+          sellingPlans(first: 1) {
+            nodes {
+              id
+            }
           }
+        }
+      }
+      options {
+        name
+        optionValues {
+          name
         }
       }
     }
   }
-  ${PRODUCT_VARIANT_FRAGMENT}
-` as const;
-
-const PRODUCT_QUERY = `#graphql
-  query Product(
-    $country: CountryCode
-    $handle: String!
-    $language: LanguageCode
-    $selectedOptions: [SelectedOptionInput!]!
-  ) @inContext(country: $country, language: $language) {
-    product(handle: $handle) {
-      ...Product
-    }
-  }
-  ${PRODUCT_FRAGMENT}
-  ${MEDIA_FIELDS_FRAGMENT}
-` as const;
+`;
