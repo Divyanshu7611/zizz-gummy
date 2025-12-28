@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { useLoaderData, type MetaFunction, useFetcher } from '@remix-run/react';
+import { useLoaderData, type MetaFunction, useFetcher, Scripts } from '@remix-run/react';
 import { Image, CartForm } from '@shopify/hydrogen';
 import {
   getSelectedProductOptions,
@@ -37,7 +37,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
 async function loadCriticalData({ context, params, request }: LoaderFunctionArgs) {
   const { handle } = params;
-  const { storefront } = context;
+  const { storefront, env } = context;
 
   if (!handle) throw new Error('Product handle missing');
 
@@ -52,13 +52,26 @@ async function loadCriticalData({ context, params, request }: LoaderFunctionArgs
 
   redirectIfHandleIsLocalized(request, { handle, data: product });
 
-  return { product };
+  return { 
+    product,
+    storeDomain: env.PUBLIC_STORE_DOMAIN,
+  };
 }
 
 export default function Product() {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, storeDomain } = useLoaderData<typeof loader>();
   const [counter, setCounter] = useState(1);
-  const [openSection, setOpenSection] = useState<string | null>('Product Info');
+  const [descriptionSections, setDescriptionSections] = useState<{ [key: string]: string }>({ 'Product Info': product.descriptionHtml || '' });
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  // Extract numeric product ID from Shopify GID for Judge.me
+  const getNumericProductId = (gid: string): string => {
+    // Shopify GID format: "gid://shopify/Product/123456789"
+    const match = gid.match(/\/(\d+)$/);
+    return match ? match[1] : gid;
+  };
+
+  const productNumericId = getNumericProductId(product.id);
 
   const addToCartFetcher = useFetcher();
   const buyNowFetcher = useFetcher();
@@ -93,51 +106,182 @@ export default function Product() {
   };
 
   // Parse description HTML into sections based on headings (client-side only)
-  const parseDescription = (html: string) => {
-    if (typeof window === 'undefined') {
-      // Server-side: return full description as one section
-      return { 'Product Info': html };
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
     }
-    
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const sections: { [key: string]: string } = {};
-    
-    let currentSection = 'Product Info';
-    let currentContent: string[] = [];
-    
-    const elements = Array.from(doc.body.children);
-    
-    elements.forEach((element) => {
-      const text = element.textContent?.trim() || '';
-      const tagName = element.tagName.toLowerCase();
-      
-      // Check if it's a heading (strong tag or h1-h6 or p with strong inside)
-      const hasStrongChild = element.querySelector('strong');
-      const isHeading = tagName === 'strong' || tagName.match(/^h[1-6]$/) || (tagName === 'p' && hasStrongChild);
-      
-      if (isHeading && text && text.length < 100) {
-        // Save previous section
-        if (currentContent.length > 0) {
-          sections[currentSection] = currentContent.join('');
-        }
-        // Start new section
-        currentSection = text.replace(/\*\*/g, '').trim();
-        currentContent = [];
-      } else if (text) {
-        currentContent.push(element.outerHTML);
-      }
-    });
-    
-    // Save last section
-    if (currentContent.length > 0) {
-      sections[currentSection] = currentContent.join('');
-    }
-    
-    return sections;
-  };
 
-  const descriptionSections = parseDescription(product.descriptionHtml);
+    const parseDescription = (html: string) => {
+      if (!html) return { 'Product Info': '' };
+      
+      const sections: { [key: string]: string } = {};
+      
+      // Client-side parsing with DOM
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      const elements = Array.from(tempDiv.children);
+      let currentSection = 'Product Info';
+      let currentContent: string[] = [];
+      
+      elements.forEach((element) => {
+        const tagName = element.tagName.toLowerCase();
+        const text = element.textContent?.trim() || '';
+        const innerHTML = element.innerHTML.trim();
+        
+        // Check if element is a heading
+        // Headings can be: h1-h6, or p/div with strong containing short text
+        const isHeadingTag = /^h[1-6]$/.test(tagName);
+        
+        // Check if it's a paragraph/div with only a strong tag (likely a heading)
+        const strongElement = element.querySelector('strong');
+        const hasOnlyStrong = strongElement && 
+          element.children.length === 1 && 
+          strongElement.tagName.toLowerCase() === 'strong' &&
+          strongElement.textContent?.trim() === text;
+        
+        // Check for common heading patterns
+        const isShortText = text.length > 0 && text.length < 200;
+        const hasQuestionMark = text.includes('?');
+        const commonHeadingPatterns = /^(Why|How|Who|What|Power|Safety|Stronger|Key Ingredients)/i;
+        const matchesHeadingPattern = commonHeadingPatterns.test(text);
+        
+        // Determine if this is a heading
+        const isHeading = isHeadingTag || 
+          (hasOnlyStrong && isShortText) ||
+          (tagName === 'p' && hasOnlyStrong && isShortText && !element.querySelector('ul') && !element.querySelector('li')) ||
+          (isShortText && (hasQuestionMark || matchesHeadingPattern) && !element.querySelector('ul') && !element.querySelector('li'));
+        
+        if (isHeading && text) {
+          // Save previous section if it has content
+          if (currentContent.length > 0) {
+            sections[currentSection] = currentContent.join('');
+          }
+          
+          // Start new section with cleaned heading text
+          currentSection = text
+            .replace(/\*\*/g, '')
+            .replace(/&amp;/g, '&')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .trim();
+          
+          currentContent = [];
+        } else if (text || innerHTML) {
+          // Regular content - add to current section
+          currentContent.push(element.outerHTML);
+        }
+      });
+      
+      // Save last section
+      if (currentContent.length > 0) {
+        sections[currentSection] = currentContent.join('');
+      }
+      
+      // If no sections were created, return everything as "Product Info"
+      if (Object.keys(sections).length === 0) {
+        return { 'Product Info': html };
+      }
+      
+      // Reorder sections: "Product Info" first, then all other sections in their original order
+      const orderedSections: { [key: string]: string } = {};
+      const productInfoKey = Object.keys(sections).find(key => 
+        /Product Info/i.test(key)
+      );
+      
+      // Add "Product Info" first if it exists
+      if (productInfoKey) {
+        orderedSections[productInfoKey] = sections[productInfoKey];
+      }
+      
+      // Add all other sections in their original order
+      Object.keys(sections).forEach(key => {
+        if (key !== productInfoKey) {
+          orderedSections[key] = sections[key];
+        }
+      });
+      
+      return orderedSections;
+    };
+
+    const parsed = parseDescription(product.descriptionHtml);
+    setDescriptionSections(parsed);
+    
+    // Set the first section as open by default
+    const firstSectionKey = Object.keys(parsed)[0];
+    if (firstSectionKey) {
+      setOpenSection((prev) => prev === null ? firstSectionKey : prev);
+    }
+  }, [product.descriptionHtml]);
+
+  // Load Judge.me reviews script
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Check if script tag already exists
+    const existingScript = document.getElementById('judgeme_product_reviews_script');
+    if (existingScript) {
+      // Script already loaded, trigger widget reload
+      if ((window as any).judgeme && (window as any).judgeme.reloadWidget) {
+        setTimeout(() => {
+          (window as any).judgeme.reloadWidget();
+        }, 100);
+      }
+      return;
+    }
+
+    // Construct Judge.me script URL
+    // Option 1: Use store domain to construct URL (if storeDomain is available)
+    // Option 2: Use the script URL from Judge.me app settings (recommended)
+    // You can find your Judge.me script URL in: Judge.me App → Settings → Installation → Script Tag
+    let scriptUrl = 'https://cdn.judge.me/widget.js';
+    
+    // Try to construct from store domain if available
+    if (storeDomain) {
+      // Remove protocol and get just the domain
+      const domain = storeDomain.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      scriptUrl = `https://judge.me/shopify/init.js?shop=${domain}`;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'judgeme_product_reviews_script';
+    script.src = scriptUrl;
+    script.async = true;
+    script.onload = () => {
+      // Wait for Judge.me to initialize
+      const checkJudgeMe = setInterval(() => {
+        if ((window as any).judgeme) {
+          clearInterval(checkJudgeMe);
+          
+          // Try multiple initialization methods
+          if ((window as any).judgeme.init) {
+            (window as any).judgeme.init();
+          }
+          
+          // Try to load the widget for this product
+          if ((window as any).judgeme.loadWidget) {
+            (window as any).judgeme.loadWidget(`judgeme_product_reviews_${productNumericId}`);
+          }
+          
+          // Also try reloadWidget
+          if ((window as any).judgeme.reloadWidget) {
+            setTimeout(() => {
+              (window as any).judgeme.reloadWidget();
+            }, 300);
+          }
+        }
+      }, 100);
+      
+      // Clear interval after 5 seconds if Judge.me doesn't load
+      setTimeout(() => clearInterval(checkJudgeMe), 5000);
+    };
+    script.onerror = () => {
+      console.error('Failed to load Judge.me script. Please check your script URL in Judge.me app settings.');
+      console.error('Expected format: https://judge.me/shopify/init.js?shop=YOUR_STORE.myshopify.com');
+    };
+    document.body.appendChild(script);
+  }, [product.id, productNumericId, storeDomain]);
 
   return (
     <div>
@@ -364,14 +508,30 @@ export default function Product() {
               price: selectedVariant.price.amount,
               vendor: product.vendor,
               variantId: selectedVariant.id,
-              variantTitle: selectedVariant.selectedOptions.map(o => o.value).join(' / ') || 'Default',
+              variantTitle: selectedVariant.selectedOptions.map((o: { name: string; value: string }) => o.value).join(' / ') || 'Default',
               quantity: counter,
             },
           ],
         }}
       />
 
-      <div className="bg-[#FAFAFA]">
+      {/* JUDGE.ME REVIEWS SECTION */}
+      <div className="max-w-screen-xl mx-auto px-5 py-8">
+        <div className="border-t border-gray-200 pt-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1F1F1F] mb-6">Customer Reviews</h2>
+          <div 
+            id={`judgeme_product_reviews_${productNumericId}`}
+            className="jdgm-widget jdgm-rev-widget"
+            data-id={productNumericId}
+            data-product-id={productNumericId}
+            data-auto-install="false"
+          >
+            {/* Judge.me widget will render here */}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="bg-[#FAFAFA]">
         <ProductBenefits />
         <Image
           src="/static/ProductPageDesc.png"
@@ -379,10 +539,10 @@ export default function Product() {
           className="h-[200px] md:h-[600px]"
         />
         <TestimonialSlider />
-      </div>
+      </div> */}
 
-      <ProductSection />
-      <FAQ />
+      {/* <ProductSection /> */}
+      {/* <FAQ /> */}
     </div>
   );
 }
