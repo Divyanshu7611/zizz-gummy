@@ -148,6 +148,41 @@ aside li {
   transform: translateX(calc(var(--aside-width) * -1));
 }
 
+/* Mobile Menu Full Screen Styles */
+@media (max-width: 768px) {
+  aside.mobile-menu-full {
+    width: 100vw !important;
+    right: -100vw !important;
+  }
+  
+  .overlay.expanded aside.mobile-menu-full {
+    transform: translateX(-100vw) !important;
+  }
+  
+  aside.mobile-menu-header {
+    padding: 1.5rem 1.25rem !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  aside.mobile-menu-main {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
+    position: relative;
+  }
+  
+  aside.mobile-menu-main > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+  }
+}
+
 button.reset {
   border: 0;
   background: inherit;

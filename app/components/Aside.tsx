@@ -52,21 +52,27 @@ export function Aside({
     return () => abortController.abort();
   }, [close, expanded]);
 
+  const isMobile = type === 'mobile';
+  
   return (
     <div
       aria-modal
       className={`overlay ${expanded ? 'expanded z-[1000]' : ''}`}
       role="dialog"
     >
-      <button className="close-outside" onClick={close} />
-      <aside>
-        <header>
-          <h3 className='font-semibold'>{heading}</h3>
-          <button className="text-3xl cursor-pointer hover:scale-105 transition-all duration-200" onClick={close} aria-label="Close">
+      {!isMobile && <button className="close-outside" onClick={close} />}
+      <aside className={isMobile ? 'mobile-menu-full' : ''}>
+        <header className={isMobile ? 'mobile-menu-header' : ''}>
+          <h3 className={`font-semibold ${isMobile ? 'text-lg' : ''}`}>{heading}</h3>
+          <button 
+            className={`${isMobile ? 'text-4xl font-light' : 'text-3xl'} cursor-pointer hover:scale-105 transition-all duration-200`} 
+            onClick={close} 
+            aria-label="Close"
+          >
             &times;
           </button>
         </header>
-        <main>{children}</main>
+        <main className={isMobile ? 'mobile-menu-main' : ''}>{children}</main>
       </aside>
     </div>
   );

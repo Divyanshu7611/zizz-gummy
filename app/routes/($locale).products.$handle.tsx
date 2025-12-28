@@ -448,17 +448,16 @@ export default function Product() {
                 <div key={index} className="border border-gray-200 rounded-lg">
                   <button
                     onClick={() => toggleSection(title)}
-                    className="w-full flex items-center justify-between p-4 text-left font-semibold text-sm hover:bg-gray-50 transition-colors"
+                    className="w-full flex items-center gap-3 p-4 text-left font-semibold text-sm hover:bg-gray-50 transition-colors"
                   >
-                    <span className="flex items-center gap-2">
-                      <span className="text-[#4CAF50]">✓</span>
+                    {openSection === title ? (
+                      <ChevronUp size={20} className="text-gray-600 flex-shrink-0" />
+                    ) : (
+                      <ChevronDown size={20} className="text-gray-600 flex-shrink-0" />
+                    )}
+                    <span className="flex-1">
                       {title.toUpperCase()}
                     </span>
-                    {openSection === title ? (
-                      <ChevronUp size={20} className="text-gray-600" />
-                    ) : (
-                      <ChevronDown size={20} className="text-gray-600" />
-                    )}
                   </button>
                   {openSection === title && (
                     <div
