@@ -99,8 +99,8 @@ export default function Homepage() {
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <RecommendedProducts products={data.recommendedProducts || null} />
       {/* <GummyDesc /> */}
-      <WhyChooseZizz />
       <ScienceBackedWellness />
+      <WhyChooseZizz />
       {/* <GummyProductSection /> */}
       {/* <motion.div
         className="w-full mt-10"
