@@ -79,6 +79,16 @@ export async function loader(args: LoaderFunctionArgs) {
 
   const {storefront, env} = args.context;
 
+  // PUBLIC_CHECKOUT_DOMAIN is required for Analytics Provider
+  // Fallback to PUBLIC_STORE_DOMAIN if not set
+  const checkoutDomain = env.PUBLIC_CHECKOUT_DOMAIN || env.PUBLIC_STORE_DOMAIN;
+  if (!env.PUBLIC_CHECKOUT_DOMAIN) {
+    console.warn(
+      'WARNING: PUBLIC_CHECKOUT_DOMAIN is not set. Using PUBLIC_STORE_DOMAIN as fallback. ' +
+      'For proper Analytics consent tracking, set PUBLIC_CHECKOUT_DOMAIN in your environment variables.'
+    );
+  }
+
   return {
     ...deferredData,
     ...criticalData,
@@ -88,7 +98,7 @@ export async function loader(args: LoaderFunctionArgs) {
       publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
     }),
     consent: {
-      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+      checkoutDomain: checkoutDomain,
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
       withPrivacyBanner: false,
       // localize the privacy banner
@@ -139,8 +149,24 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
       console.error(error);
       return null;
     });
+  
+  const cartPromise = cart.get();
+  
+  // Log cart promise resolution for debugging
+  cartPromise.then((cartData) => {
+    console.log('[ROOT LOADER] Cart promise resolved:', {
+      hasCart: !!cartData,
+      cartId: cartData?.id,
+      totalQuantity: cartData?.totalQuantity,
+      hasLines: !!cartData?.lines,
+      linesCount: cartData?.lines?.nodes?.length,
+    });
+  }).catch((error) => {
+    console.error('[ROOT LOADER] Cart promise rejected:', error);
+  });
+  
   return {
-    cart: cart.get(),
+    cart: cartPromise,
     isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
@@ -164,12 +190,12 @@ export function Layout({children}: {children?: React.ReactNode}) {
       <body>
         {data ? (
           <Analytics.Provider
-            cart={data.cart}
-            shop={data.shop}
-            consent={data.consent}
+            cart={data.cart as any}
+            shop={data.shop as any}
+            consent={data.consent as any}
           >
             <Toaster/>
-            <PageLayout {...data}>{children}</PageLayout>
+            <PageLayout {...(data as any)}>{children}</PageLayout>
           </Analytics.Provider>
         ) : (
           children

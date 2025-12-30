@@ -97,9 +97,9 @@ export default function Product() {
     product.sellingPlanGroups?.nodes?.[0]?.sellingPlans?.nodes?.[0];
 
   // Redirect after Buy Now
-  if (buyNowFetcher.state === 'idle' && buyNowFetcher.data) {
-    window.location.href = '/cart';
-  }
+    if (buyNowFetcher.state === 'idle' && buyNowFetcher.data) {
+      window.location.href = '/cart';
+    }
 
   const toggleSection = (section: string) => {
     setOpenSection(openSection === section ? null : section);
@@ -359,6 +359,7 @@ export default function Product() {
                         {
                           merchandiseId: selectedVariant.id,
                           quantity: counter,
+                          selectedVariant: selectedVariant,
                           ...(sellingPlan && {
                             sellingPlanId: sellingPlan.id,
                           }),
@@ -390,6 +391,7 @@ export default function Product() {
                           {
                             merchandiseId: selectedVariant.id,
                             quantity: counter,
+                            selectedVariant: selectedVariant,
                             ...(sellingPlan && {
                               sellingPlanId: sellingPlan.id,
                             }),
@@ -604,6 +606,10 @@ const PRODUCT_QUERY = `#graphql
         selectedOptions {
           name
           value
+        }
+        product {
+          handle
+          title
         }
       }
       sellingPlanGroups(first: 1) {

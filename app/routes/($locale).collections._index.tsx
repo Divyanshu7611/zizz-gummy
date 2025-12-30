@@ -166,16 +166,21 @@ export async function loader(args: LoaderFunctionArgs) {
 async function loadCriticalData({ context, request }: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 6,
-    pageInfo: undefined,
   });
 
-  const [{ collections }] = await Promise.all([
-    context.storefront.query(COLLECTIONS_QUERY, {
-      variables: paginationVariables,
-    }),
-  ]);
+  try {
+    const [{ collections }] = await Promise.all([
+      context.storefront.query(COLLECTIONS_QUERY, {
+        variables: paginationVariables,
+      }),
+    ]);
 
-  return { collections };
+    return { collections: collections || { nodes: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null } } };
+  } catch (error) {
+    console.error('[COLLECTIONS LOADER] Error loading collections:', error);
+    // Return empty collections on error to prevent null responses
+    return { collections: { nodes: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null } } };
+  }
 }
 
 function loadDeferredData({ context }: LoaderFunctionArgs) {
@@ -250,11 +255,6 @@ function CollectionItem({
           <h5 className="md:text-lg text-sm font-semibold text-gray-900 mb-2 px-4 h-12 md:h-6">
             {collection.title}
           </h5>
-          {collection.description && (
-            <p className="text-sm text-gray-600 line-clamp-2 mb-3 px-4 h-10 md:block hidden">
-              {collection.description}
-            </p>
-          )}
           <button className="text-sm font-medium text-white bg-black py-2 w-full transition-colors duration-200 cursor-pointer">
             Shop Now
           </button>
