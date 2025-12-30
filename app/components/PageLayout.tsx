@@ -243,7 +243,7 @@ export function PageLayout({
           <IoHomeOutline className="text-xl" />
           <span className="text-xs">Home</span>
         </Link>
-        <Link to="/collections" className="flex flex-col items-center text-gray-600">
+        <Link to="/collections" prefetch="viewport" className="flex flex-col items-center text-gray-600">
           <AiOutlineMenu className="text-xl" />
           <span className="text-xs">Category</span>
         </Link>

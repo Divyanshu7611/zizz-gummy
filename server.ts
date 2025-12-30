@@ -35,11 +35,40 @@ export default {
 
       const response = await handleRequest(request);
 
+      // Check for cart cookie from action BEFORE committing session cookie
+      // The cart cookie should come from the action's headers export
+      const existingSetCookies = response.headers.getSetCookie();
+      const cartCookieExists = existingSetCookies.some(cookie => cookie.startsWith('cart='));
+      
+      console.log('[SERVER] Response headers before session commit:', {
+        allSetCookies: existingSetCookies.length,
+        cartCookieExists,
+        setCookieHeaders: existingSetCookies.map(c => c.substring(0, 100)),
+      });
+      
       if (appLoadContext.session.isPending) {
-        response.headers.set(
-          'Set-Cookie',
-          await appLoadContext.session.commit(),
-        );
+        const sessionCookie = await appLoadContext.session.commit();
+        
+        // Always append session cookie to preserve any existing Set-Cookie headers (like cart cookie)
+        response.headers.append('Set-Cookie', sessionCookie);
+        console.log('[SERVER] Session cookie appended');
+        console.log('[SERVER] Session cookie committed:', sessionCookie.substring(0, 100) + '...');
+        
+        // Log all Set-Cookie headers after appending session cookie
+        const allSetCookiesAfter = response.headers.getSetCookie();
+        console.log('[SERVER] All Set-Cookie headers after session commit:', {
+          count: allSetCookiesAfter.length,
+          cookies: allSetCookiesAfter.map(c => c.substring(0, 100)),
+        });
+      } else {
+        console.log('[SERVER] Session isPending is false, not committing session cookie');
+        // Even if session is not pending, log existing Set-Cookie headers
+        if (existingSetCookies.length > 0) {
+          console.log('[SERVER] Existing Set-Cookie headers (session not pending):', {
+            count: existingSetCookies.length,
+            cookies: existingSetCookies.map(c => c.substring(0, 100)),
+          });
+        }
       }
 
       if (response.status === 404) {

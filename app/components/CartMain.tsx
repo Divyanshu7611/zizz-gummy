@@ -104,6 +104,17 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
   // so the user immediately sees feedback when they modify the cart.
   const cart = useOptimisticCart(originalCart);
 
+  // Debug logging
+  console.log('[CartMain] Render:', {
+    hasOriginalCart: !!originalCart,
+    originalCartTotalQuantity: originalCart?.totalQuantity,
+    originalCartLinesCount: originalCart?.lines?.nodes?.length,
+    hasOptimisticCart: !!cart,
+    optimisticCartTotalQuantity: cart?.totalQuantity,
+    optimisticCartLinesCount: cart?.lines?.nodes?.length,
+    linesNodes: cart?.lines?.nodes,
+  });
+
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&

@@ -42,6 +42,7 @@ export function ProductItem({
         {
           merchandiseId: firstVariant.id,
           quantity: 1,
+          selectedVariant: firstVariant,
           ...(sellingPlan && { sellingPlanId: sellingPlan.id }),
         },
       ]
